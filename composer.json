@@ -1,0 +1,12 @@
+{
+    "name": "ndeblauw/blueadmin",
+    "description": "Backend forms for usages by bluePundit",
+    "authors": [
+        {
+            "name": "Nico Deblauwe",
+            "email": "nico@bluepundit.eu"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

@@ -12,7 +12,7 @@ class BlueAdminController extends Controller
 
     public function dashboard()
     {
-        return view('blueadmin.dashboard');
+        return view('BlueAdminPages::dashboard');
     }
     
     public function index($modelname)

@@ -10,7 +10,7 @@
         <small>manage your website content</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{ route('admin') }}"><i class="fa fa-dashboard"></i> Admin</a></li>
+        <li><a href="{{ route('blueadmin.dashboard') }}"><i class="fa fa-dashboard"></i> Admin</a></li>
         <li><a href="">Site content</a></li>
         <li class="active">{{ $title }}</li>
       </ol>
@@ -68,10 +68,10 @@
                                 {!! ($m->visible) ? '<i class="far fa-check-circle text-success"></i>' : '<i class="far fa-times-circle text-danger"></i>' !!}
                                 @break
                               @case('belongsto')
-                                {{ $m->$field->title }}
+                                {{ optional($m->$field)->title ?? '-' }}
                                 @break
                               @default
-                                {{$m->$field}}
+                                {{$m->$field ?? '-'}}
                                 @break
                             @endswitch
   	                      </td>

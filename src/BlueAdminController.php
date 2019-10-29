@@ -9,6 +9,11 @@ use App\Http\Controllers\Controller;
 class BlueAdminController extends Controller
 {
     protected $config;
+
+    public function dashboard()
+    {
+        return view('blueadmin.dashboard');
+    }
     
     public function index($modelname)
     {

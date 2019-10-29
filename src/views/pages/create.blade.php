@@ -10,7 +10,7 @@
         <small>manage your website content</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{ route('admin') }}"><i class="fa fa-dashboard"></i> Admin</a></li>
+        <li><a href="{{ route('blueadmin.dashboard') }}"><i class="fa fa-dashboard"></i> Admin</a></li>
         <li><a href="">Site content</a></li>
         <li class="active">Pages</li>
       </ol>

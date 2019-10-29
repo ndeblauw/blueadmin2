@@ -1,7 +1,7 @@
 {{-- resources/views/components/forms/belongsto.blade.php --}}
 
 @php
-  $placeholder = (isset($placeholder)) ? $placeholder : 'dd';
+  $placeholder = (isset($placeholder)) ? $placeholder : '';
   $help = (isset($help)) ? $help : null;
   $value = (isset($value)) ? $value : null;
 @endphp

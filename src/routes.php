@@ -1,7 +1,7 @@
 <?php
 
 Route::group(['prefix' => 'admin', 'middleware' => ['web','auth']], function () {
-	Route::get('', 'Ndeblauw\BlueAdmin\BlueAdminController@dashboard')->name('admin');
+	Route::get('', 'Ndeblauw\BlueAdmin\BlueAdminController@dashboard')->name('blueadmin.dashboard');
 	Route::get('{modelname}', 'Ndeblauw\BlueAdmin\BlueAdminController@index')->name('blueadmin.index');
 	Route::get('{modelname}/create', 'Ndeblauw\BlueAdmin\BlueAdminController@create')->name('blueadmin.create');
 	Route::post('{modelname}', 'Ndeblauw\BlueAdmin\BlueAdminController@store')->name('blueadmin.store');

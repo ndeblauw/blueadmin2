@@ -1,6 +1,6 @@
 {
     "name": "ndeblauw/blueadmin",
-    "description": "Backend forms for usages by bluePundit",
+    "description": "Admin backend",
     "authors": [
         {
             "name": "Nico Deblauwe",
@@ -8,5 +8,8 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "spatie/laravel-blade-x": "^2.4",
+        "jeroennoten/laravel-adminlte": "^2.0",
+    }
 }

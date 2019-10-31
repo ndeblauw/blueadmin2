@@ -65,7 +65,7 @@
   	                      <td>
                             @switch($value)
                               @case('boolean')
-                                {!! ($m->visible) ? '<i class="far fa-check-circle text-success"></i>' : '<i class="far fa-times-circle text-danger"></i>' !!}
+                                {!! ($m->$field) ? '<i class="far fa-check-circle text-success"></i>' : '<i class="far fa-times-circle text-danger"></i>' !!}
                                 @break
                               @case('belongsto')
                                 {{ optional($m->$field)->title ?? '-' }}

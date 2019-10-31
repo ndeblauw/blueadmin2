@@ -17,7 +17,7 @@
 	    <p class="help-block" style="margin-left: 10px;">@error($id){{$message}} @enderror <span class="text-muted">{{$help}}</span></p>
     @else
 	    @if($help)
-	    	<p class="help-block" style="margin-left: 10px;">{{$help}}</p>
+	    	<p class="help-block" style="margin-left: 10px;">{!!$help!!}</p>
 	    @endif
 	@enderror
   

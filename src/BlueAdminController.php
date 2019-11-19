@@ -26,7 +26,8 @@ class BlueAdminController extends Controller
         			->with('models', $models)
         			->with('fields', $fields)
         			->with('title', ucfirst($modelname))
-        			->with('modelname', $modelname);
+        			->with('modelname', $modelname)
+                    ->with('widgets', $this->config->widgets() ?? []);
     }
     
 

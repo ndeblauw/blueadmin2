@@ -100,6 +100,16 @@
             </div>
             <!-- /.card -->
           </div>
+
+          <div class="col-12 col-md-2">
+
+            @foreach($widgets as $widget)
+              @widget($widget)
+            @endforeach
+
+          </div>
+
+
         </div>	
 
 

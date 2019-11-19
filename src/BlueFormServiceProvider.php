@@ -3,6 +3,7 @@
 namespace Ndeblauw\BlueAdmin;
 
 use Spatie\BladeX\Facades\BladeX;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class BlueAdminServiceProvider extends ServiceProvider
@@ -26,6 +27,11 @@ class BlueAdminServiceProvider extends ServiceProvider
     public function boot()
     {
         include __DIR__.'/routes.php';
+
+        Blade::directive('widget', function ($expression) {
+            $name = trim($expression, "'");
+            return "<?= resolve({$name})->loadView(); ?>";
+        });
 
         BladeX::component('BlueAdminFormElements::text')->tag('form-text');
         BladeX::component('BlueAdminFormElements::textarea')->tag('form-textarea');

@@ -3,7 +3,7 @@
 @php
   $placeholder = (isset($placeholder)) ? $placeholder : '';
   $help = (isset($help)) ? $help : null;
-  $value = (isset($value)) ? $value : null;
+  $value = (isset($m)) ? $m->$id : null;
 @endphp
 
 <div class="form-group @error($id)has-error @enderror" style="margin-top: 15px;">

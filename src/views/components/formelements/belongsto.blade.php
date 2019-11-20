@@ -3,7 +3,8 @@
 @php
   $placeholder = (isset($placeholder)) ? $placeholder : '';
   $help = (isset($help)) ? $help : null;
-  $value = (isset($m)) ? $m->$id : null;
+  $value = (isset($m)) ? $m->$id : (isset($value) ? $value : null);
+  $noNullOption = (isset($noNullOption)) ? true : false;
 @endphp
 
 <div class="form-group @error($id)has-error @enderror" style="margin-top: 15px;">
@@ -12,7 +13,9 @@
     @error('{{$id}}')<div class="alert alert-danger">{{ $message }}</div>@enderror
 
     <select id="{{$id}}" name="{{$id}}" class="form-control select2" style="width: 50%;">
-      <option @if($value == null) selected="selected" @endif value="">-</option>
+      @if(! $noNullOption)
+        <option @if($value == null) selected="selected" @endif value="">-</option>
+      @endif
       @foreach($list as $key => $item)
         <option @if($value == $key) selected="selected" @endif value={{$key}}>{{$item}}</option>
       @endforeach

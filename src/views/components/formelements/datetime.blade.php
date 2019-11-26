@@ -28,7 +28,7 @@
 <div class="clearfix"></div>
 
 
-{{--source: https://www.malot.fr/bootstrap-datetimepicker/index.php}}
+{{--source: https://www.malot.fr/bootstrap-datetimepicker/index.php --}}
 
 
 

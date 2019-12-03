@@ -7,7 +7,8 @@
             "email": "nico@bluepundit.eu"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "spatie/spatie/laravel-medialibrary": "^7.0.0",
         "spatie/laravel-blade-x": "^2.4",

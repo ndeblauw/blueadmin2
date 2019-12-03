@@ -39,5 +39,7 @@ class BlueAdminServiceProvider extends ServiceProvider
         BladeX::component('BlueAdminFormElements::belongsto')->tag('form-belongsto');
         BladeX::component('BlueAdminFormElements::info')->tag('form-info');
         BladeX::component('BlueAdminFormElements::datetime')->tag('form-datetime');
+
+        BladeX::component('BlueAdminFormElements::mediafile')->tag('form-mediafile');
     }
 }

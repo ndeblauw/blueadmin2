@@ -1,6 +1,13 @@
 {
     "name": "ndeblauw/blueadmin",
     "description": "Admin backend",
+    "license": "proprietary",
+    "repositories":[
+    {
+        "type": "vcs",
+        "url" : "git@bitbucket.org:ndeblauw/blueadmin.git"
+    }
+    ],    
     "authors": [
         {
             "name": "Nico Deblauwe",
@@ -8,8 +15,9 @@
         }
     ],
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "spatie/laravel-blade-x": "^2.4",
-        "jeroennoten/laravel-adminlte": "^2.0",
+        "jeroennoten/laravel-adminlte": "^2.0"
     }
 }

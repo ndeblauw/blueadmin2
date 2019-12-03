@@ -32,7 +32,7 @@
               <h3 class="box-title"><i class="far fa-edit"></i>&nbsp;Edit {{$title}} <strong>{{$m->id}}</strong></h3>
             </div><!-- /.box-header -->
 
-            <form role="form" action="{{ route('blueadmin.update', ['modelname' => $modelname, 'id' => $m->id]) }}" method="POST" class="horizontal">
+            <form role="form" action="{{ route('blueadmin.update', ['modelname' => $modelname, 'id' => $m->id]) }}" method="POST" class="horizontal" enctype="multipart/form-data">
 
               <div class="box-body">
                 @csrf

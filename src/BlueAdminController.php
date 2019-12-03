@@ -49,7 +49,17 @@ class BlueAdminController extends Controller
             $valid[$key] = array_key_exists($key, $valid) ? 1 : 0;  
         }
 
+        foreach($this->config->mediafiles() as $file) {
+            unset($valid[$file]);
+        }
+
         $model = $this->config->model::create($valid);
+
+        foreach($this->config->mediafiles() as $file) {
+            if($request->has($file)) {
+                $model->addMediaFromRequest($file)->toMediaCollection($file);
+            }
+        }
 
         return redirect()->route('blueadmin.index', $modelname);
 	}
@@ -75,6 +85,14 @@ class BlueAdminController extends Controller
 		foreach(array_keys($this->config->index_fields, 'boolean') as $key) {
 			$valid[$key] = array_key_exists($key, $valid) ? 1 : 0;	
 		}
+
+        foreach($this->config->mediafiles() as $file) {
+            if($request->has($file)) {
+                optional($model->getFirstMedia($file))->delete();
+                $model->addMediaFromRequest($file)->toMediaCollection($file);
+                unset($valid[$file]);
+            }
+        }
         
         $model->update($valid);
         $model->save();

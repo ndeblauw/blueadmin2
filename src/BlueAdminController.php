@@ -56,7 +56,9 @@ class BlueAdminController extends Controller
         $model = $this->config->model::create($valid);
 
         foreach($this->config->mediafiles() as $file) {
-            $files[] = $model->addMediaFromRequest($file)->toMediaCollection($file);
+            if($request->has($file)) {
+                $model->addMediaFromRequest($file)->toMediaCollection($file);
+            }
         }
 
         return redirect()->route('blueadmin.index', $modelname);

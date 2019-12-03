@@ -31,7 +31,7 @@
               <h3 class="box-title"><i class="far fa-plus-square"></i>&nbsp;Add a new <strong>{{$title}}</strong></h3>
             </div><!-- /.box-header -->
 
-            <form role="form" action="{{ route('blueadmin.store', ['modelname' => $modelname]) }}" method="POST" class="horizontal">
+            <form role="form" action="{{ route('blueadmin.store', ['modelname' => $modelname]) }}" method="POST" class="horizontal" enctype="multipart/form-data">
 
               <div class="box-body">
                 @csrf

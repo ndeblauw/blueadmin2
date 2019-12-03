@@ -1,7 +1,6 @@
 {
     "name": "ndeblauw/blueadmin",
     "description": "Admin backend",
-    "version": "0.5.3",
     "license": "proprietary",
     "repositories":[
     {
@@ -18,7 +17,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "spatie/spatie/laravel-medialibrary": "^7.0.0",
+        "spatie/laravel-medialibrary": "^7.0.0",
         "spatie/laravel-blade-x": "^2.4",
         "jeroennoten/laravel-adminlte": "^2.0"
     }

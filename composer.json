@@ -1,6 +1,7 @@
 {
     "name": "ndeblauw/blueadmin",
     "description": "Admin backend",
+    "version": "0.5.3",
     "license": "proprietary",
     "repositories":[
     {

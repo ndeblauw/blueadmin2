@@ -119,5 +119,5 @@
 
 
 @section('right-sidebar')
-	@include('help.sitecontent')
+	@includeFirst(['help.sitecontent', 'BlueAdminPages::genericHelp'])
 @stop

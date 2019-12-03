@@ -17,7 +17,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "spatie/laravel-medialibrary": "^7.0.0",
         "spatie/laravel-blade-x": "^2.4",
         "jeroennoten/laravel-adminlte": "^2.0"
     }

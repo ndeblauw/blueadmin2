@@ -9,7 +9,8 @@
     ],
     "minimum-stability": "dev",
     "require": {
+        "spatie/spatie/laravel-medialibrary": "^7.0.0",
         "spatie/laravel-blade-x": "^2.4",
-        "jeroennoten/laravel-adminlte": "^2.0",
+        "jeroennoten/laravel-adminlte": "^2.0"
     }
 }

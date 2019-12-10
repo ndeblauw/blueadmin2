@@ -14,10 +14,10 @@
     <input type="text" class="form-control" id="{{$id}}" name="{{$id}}" placeholder="{{$placeholder}}" value="{{old($id, $value)}}">
     
     @error($id)
-	    <p class="help-block" style="margin-left: 10px;">@error($id){{$message}} @enderror <span class="text-muted">{{$help}}</span></p>
+	    <p class="help-block" style="margin-left: 10px;"><small>@error($id){{$message}} @enderror <span class="text-muted">{{$help}}</span></small></p>
     @else
 	    @if($help)
-	    	<p class="help-block" style="margin-left: 10px;">{!!$help!!}</p>
+	    	<p class="help-block" style="margin-left: 10px;"><small>{!!$help!!}</small></p>
 	    @endif
 	@enderror
   

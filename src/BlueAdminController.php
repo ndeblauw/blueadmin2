@@ -4,6 +4,7 @@ namespace Ndeblauw\BlueAdmin;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Yajra\Datatables\Datatables;
 use App\Http\Controllers\Controller;
 
 class BlueAdminController extends Controller
@@ -19,17 +20,36 @@ class BlueAdminController extends Controller
     {
         $this->setConfig($modelname);
 
-        $models = $this->getModels();
-        $fields = (isset($this->config->index_fields)) ? $this->config->index_fields : ['id' => ''];
+        $columns = $this->config->index_columns();
+
+        $actions_col_nr = $this->config->index_actions_column_nr();
 
         return view('BlueAdminPages::index')
-        			->with('models', $models)
-        			->with('fields', $fields)
+        			->with('columns', $columns)
+                    ->with('actions_col_nr', $actions_col_nr)
         			->with('title', ucfirst($modelname))
         			->with('modelname', $modelname)
                     ->with('widgets', $this->config->widgets() ?? []);
     }
-    
+
+    public function api_index($modelname)
+    {
+        $this->setConfig($modelname);
+        $eager_load = $this->config->index_eager_load();
+
+        return Datatables::of( $this->config->model::query()->with($eager_load) )->toJson();
+    }    
+
+    public function show($modelname, $id)
+    {
+        $this->setConfig($modelname);
+        $model = $this->getModel($id);
+
+        return view('admin.' . $modelname .'.show')
+                    ->with('m', $model)
+                    ->with('title', ucfirst(Str::singular($modelname)))
+                    ->with('modelname', $modelname);
+    }    
 
     public function create($modelname)
 	{

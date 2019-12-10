@@ -140,8 +140,12 @@ class BlueAdminController extends Controller
 
     private function getModels()
     {
+        if( isset($this->config->index_orderby) && !is_array($this->config->index_orderby) ) {
+            $this->config->index_orderby = ['variable' => $this->config->index_orderby, 'order' => 'ASC' ];
+        }
+
         if(isset($this->config->index_orderby))
-            $models = $this->config->model::orderBy($this->config->index_orderby)->get();
+            $models = $this->config->model::orderBy($this->config->index_orderby['variable'], $this->config->index_orderby['order'])->get();
         else
             $models = $this->config->model::all();
 

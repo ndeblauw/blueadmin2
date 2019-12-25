@@ -15,8 +15,8 @@ class BlueAdminServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->loadViewsFrom(__DIR__.'/views/components/formelements', 'BlueAdminFormElements');
-        $this->loadViewsFrom(__DIR__.'/views/pages', 'BlueAdminPages');
+        $this->loadViewsFrom(__DIR__.'/../resources/views/components/formelements', 'BlueAdminFormElements');
+        $this->loadViewsFrom(__DIR__.'/../resources/views/pages', 'BlueAdminPages');
     }
 
     /**

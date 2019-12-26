@@ -22,10 +22,22 @@ class BlueAdminController extends Controller
 
         $columns = $this->config->index_columns();
 
+        if( isset($this->config->initial_ordering) )
+        {
+            if(! is_array($this->config->initial_ordering) ) {
+                $initial_ordering = ['column' => $this->config->initial_ordering, 'order' => 'asc' ];
+            } else {
+                $initial_ordering = $this->config->initial_ordering;
+            }
+        } else {
+            $initial_ordering = ['column' => 0, 'order' => 'asc'];
+        }
+
         $actions_col_nr = $this->config->index_actions_column_nr();
 
         return view('BlueAdminPages::index')
         			->with('columns', $columns)
+                    ->with('initial_ordering', $initial_ordering)
                     ->with('actions_col_nr', $actions_col_nr)
         			->with('title', ucfirst($modelname))
         			->with('modelname', $modelname)

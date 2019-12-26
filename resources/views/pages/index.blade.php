@@ -107,7 +107,7 @@ $(function() {
         processing: true,
         serverSide: true,
         ajax: '{!! route('blueadmin.api.index', $modelname) !!}',
-        order: [0, 'asc'],
+        order: [{{ $initial_ordering['column'] }}, '{{ $initial_ordering['order'] }}'],
         columns: [
             @foreach($columns as $column)
               { data: '{{$column->value}}'},

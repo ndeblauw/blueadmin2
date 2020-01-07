@@ -19,7 +19,7 @@
         <option @if($value == null)selected="selected" @endif value="">-</option>
       @endif
       @foreach($list as $key => $item)
-        <option value="{{$key}}"@if($value == $key) selected="selected"@endif>{{$item}}</option>
+        <option value="{{$key}}" @if($value == $key) selected="selected" @endif>{{$item}}</option>
       @endforeach
     </select>
 

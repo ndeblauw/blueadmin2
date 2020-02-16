@@ -4,7 +4,9 @@
 	$id_field = (isset($id)) ? $id : 'id';
 	$help = (isset($help)) ? $help : null;
 	$link = (isset($link)) ? $link : null;
-	$value = (isset($value)) ? $value : ( (isset($m)) ? $m->$id_field : null);
+
+  $vars = get_defined_vars();
+	$value = (array_key_exists('value', $vars)) ? $value : ( (isset($m)) ? $m->$id_field : null);
 @endphp
 
 @if($value)
@@ -12,9 +14,9 @@
   <label class="col-sm-2">{{$label}}</label>
   <div class="col-sm-10">
   	@if($link)
-  		<a href="{{$link}}">{{$value}}</a>
+  		<a href="{{$link}}">{!!$value!!}</a>
   	@else
-	    {{$value}}
+	    {!! $value!!}
 	@endif
 
 	@if($help)

@@ -5,7 +5,9 @@ namespace Ndeblauw\BlueAdmin;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 
 class BlueAdminController extends Controller
 {
@@ -65,12 +67,30 @@ class BlueAdminController extends Controller
 
     public function create($modelname)
 	{
+        Session::put('blueadmin.returnpath', str_replace(url('/'), '', url()->previous()) );
+
         $this->setConfig($modelname);
 
         return view('BlueAdminPages::create')
         			->with('title', ucfirst(Str::singular($modelname)))
         			->with('modelname', $modelname);
 	}
+
+
+    public function create_with_prefill($modelname, $prefill_modelname, $prefill_id)
+    {
+        Session::put('blueadmin.returnpath', str_replace(url('/'), '', url()->previous()) );
+
+        $this->setConfig($prefill_modelname);
+        $prefill = $this->getModel($prefill_id);
+
+        $this->setConfig($modelname);
+
+        return view('BlueAdminPages::create')
+                    ->with('title', ucfirst(Str::singular($modelname)))
+                    ->with('prefill', $prefill)
+                    ->with('modelname', $modelname);
+    }
 
 	public function store(Request $request, $modelname) 
 	{
@@ -93,12 +113,15 @@ class BlueAdminController extends Controller
             }
         }
 
-        return redirect()->route('blueadmin.index', $modelname);
+        $returnPath = Session::get('blueadmin.returnpath', route('blueadmin.index', $modelname) );
+        return redirect($returnPath);
 	}
 
 
     public function edit($modelname, $id)
     {
+        Session::put('blueadmin.returnpath', str_replace(url('/'), '', url()->previous()) );
+
         $this->setConfig($modelname);
         $model = $this->getModel($id);
 
@@ -114,9 +137,16 @@ class BlueAdminController extends Controller
         $model = $this->getModel($id);
 
         $valid = $request->validate( $this->config->validation() );
+
+        // Make sure that boolean stuff is treated as boolean
 		foreach(array_keys($this->config->index_fields, 'boolean') as $key) {
 			$valid[$key] = array_key_exists($key, $valid) ? 1 : 0;	
 		}
+/*
+        // Whenever a nullable field is empty, set value to null
+        foreach($this->config->nullable_fields as $key) {
+            $valid[$key] = ($valid[$key] == '') ? NULL : $valid[$key];
+        }*/
 
         foreach($this->config->mediafiles() as $file) {
             if($request->has($file)) {
@@ -127,19 +157,21 @@ class BlueAdminController extends Controller
         }
         
         $model->update($valid);
-        $model->save();
+        //$model->save();
 
-        return redirect()->route('blueadmin.index', $modelname);
+        $returnPath = Session::get('blueadmin.returnpath', route('blueadmin.index', $modelname) );
+        return redirect($returnPath);
     }
 
 
     public function destroy($modelname, $id)
     {
+        $returnPath = str_replace(url('/'), '', url()->previous());
         $this->setConfig($modelname);
         $model = $this->getModel($id);
 
         $model->delete();
-        return redirect()->route('blueadmin.index', ['modelname' => $modelname, 'enable_delete' => 'true']);
+        return redirect($returnPath);
     }
 
 

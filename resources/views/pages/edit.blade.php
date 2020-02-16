@@ -44,7 +44,7 @@
 
               <div class="box-footer" style="background-color: #dfe6ee">
                 <div class="pull-right">
-                  <a href="{{ route('blueadmin.index', ['modelname' => $modelname]) }}" class="btn btn-default">Cancel</a>&nbsp;&nbsp;
+                  <a href="{{ Session::get('blueadmin.returnpath', route('blueadmin.index', $modelname) ) }}" class="btn btn-default">Cancel</a>&nbsp;&nbsp;
                   <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
               </div><!-- /.box-footer -->

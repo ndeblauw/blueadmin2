@@ -4,6 +4,8 @@ namespace Ndeblauw\BlueAdmin;
 
 class BlueAdminModel {
 
+	public $nullable_fields = [];
+
 	public function index_columns() 
 	{
 		if( isset($this->index_fields) ) {

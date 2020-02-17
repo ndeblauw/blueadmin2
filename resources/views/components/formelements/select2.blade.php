@@ -25,7 +25,7 @@
 
     <select id="{{$id}}" name="{{$id}}" class="form-control select2" style="width: 50%;">
       @if(! is_null($value) )
-        <option selected="selected" value="$value">{{ $string_value = \App\Location::find($value)->name }} </option>
+        <option selected="selected" value="{{$value}}">{{ $string_value = \App\Location::find($value)->name }} </option>
       @endif
 
 

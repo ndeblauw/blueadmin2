@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Edit ' . $title . ' ' . $m->id . ' | ' . config('app.name') . ' admin');
+@section('title', 'Edit ' . $title . ' ' . $m->id . ' | ' . config('app.name') . ' admin')
 
 
 @section('content_header')

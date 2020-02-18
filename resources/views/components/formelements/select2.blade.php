@@ -16,8 +16,6 @@
   <hr/>
 @endif
 
-
-
 <div class="form-group @error($id)has-error @enderror" style="margin-top: 15px;">
   <label class="col-sm-2" for="{{$id}}">{{$label}}</label>
   <div class="col-sm-10">
@@ -25,7 +23,7 @@
 
     <select id="{{$id}}" name="{{$id}}" class="form-control select2" style="width: 50%;">
       @if(! is_null($value) )
-        <option selected="selected" value="{{$value}}">{{ $string_value = \App\Location::find($value)->name }} </option>
+        <option selected="selected" value="{{$value}}">{{ $select2Preselection }} </option>
       @endif
 
 

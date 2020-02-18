@@ -39,8 +39,9 @@
     	                @else
     	                    <a href="?enable_delete=true" class="btn btn-xs text-muted"><i class="fas fa-toggle-off"></i>&nbsp;DELETE</a>&nbsp;&nbsp;&nbsp;
     	                @endif
-                    	
-                    	<a href="{{route('blueadmin.create', ['modelname' => $modelname])}}" class="btn btn-xs btn-success"><i class="far fa-plus-square"></i>&nbsp;Create</a>
+                    	@if(View::exists('admin.'.$modelname.'._form'))
+                    	 <a href="{{route('blueadmin.create', ['modelname' => $modelname])}}" class="btn btn-xs btn-success"><i class="far fa-plus-square"></i>&nbsp;Create</a>
+                      @endif
     	            </div>                
 
 

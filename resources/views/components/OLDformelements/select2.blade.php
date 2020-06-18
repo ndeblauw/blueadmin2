@@ -27,15 +27,19 @@
       @endif
 
 
-{{--      
+
+
+{{--
       @if( $allowNullOption)
         <option @if($value == null)selected="selected" @endif value="">-</option>
       @endif
       @foreach($list as $key => $item)
         <option value="{{$key}}" @if($value == $key) selected="selected" @endif>{{$item}}</option>
       @endforeach
---}}      
+--}}
     </select>
+
+
 
     @error($id)
         <p class="help-block" style="margin-left: 10px;">@error($id){{$message}} @enderror <span class="text-muted">{{$help}}</span></p>
@@ -44,11 +48,11 @@
             <p class="help-block" style="margin-left: 10px;">{{$help}}</p>
         @endif
     @enderror
-  
+
   </div>
 </div>
 
-<div class="clearfix"></div>     
+<div class="clearfix"></div>
 
 
 @push('blueadmin_scripts')
@@ -62,7 +66,7 @@ $(document).ready(function(){
     //$('.select2').select2()
 
 $( "#{{$id}}" ).select2({
-        ajax: { 
+        ajax: {
           url: "{{$select2DataUrl}}",
           type: "get",
           dataType: 'json',
@@ -80,7 +84,7 @@ $( "#{{$id}}" ).select2({
           cache: true
         }
 
-      });    
+      });
   });
 
 </script>

@@ -1,5 +1,5 @@
 <?php
-
+/*
 Route::group(['prefix' => 'admin', 'middleware' => ['web','auth']], function () {
 	Route::get('', 'Ndeblauw\BlueAdmin\BlueAdminController@dashboard')->name('blueadmin.dashboard');
 
@@ -18,4 +18,5 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web','auth']], function () 
 
 	Route::get('{modelname}/create/prefill/{prefill_modelname}/{prefill_id}', 'Ndeblauw\BlueAdmin\BlueAdminController@create_with_prefill')->name('blueadmin.create.prefill');
 });
+*/
 

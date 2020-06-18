@@ -15,44 +15,40 @@ class BlueAdminController extends Controller
 
     public function dashboard()
     {
-        return view('BlueAdminPages::dashboard');
+        return view()->first(['admin.dashboard','BlueAdminPages::dashboard']);
     }
-    
+
+
     public function index($modelname)
     {
         $this->setConfig($modelname);
 
-        $columns = $this->config->index_columns();
-
-        if( isset($this->config->initial_ordering) )
-        {
-            if(! is_array($this->config->initial_ordering) ) {
-                $initial_ordering = ['column' => $this->config->initial_ordering, 'order' => 'asc' ];
-            } else {
-                $initial_ordering = $this->config->initial_ordering;
-            }
-        } else {
-            $initial_ordering = ['column' => 0, 'order' => 'asc'];
-        }
-
-        $actions_col_nr = $this->config->index_actions_column_nr();
-
         return view('BlueAdminPages::index')
-        			->with('columns', $columns)
-                    ->with('initial_ordering', $initial_ordering)
-                    ->with('actions_col_nr', $actions_col_nr)
+        			->with('columns', $this->config->index_columns() )
+                    ->with('initial_ordering', $this->config->index_initial_ordering() )
+                    ->with('actions_col_nr', $this->config->index_actions_column_nr() )
         			->with('title', ucfirst($modelname))
-        			->with('modelname', $modelname)
-                    ->with('widgets', $this->config->widgets() ?? []);
+        			->with('modelname', $modelname);
+                    // for now without widgets->with('widgets', $this->config->widgets() ?? []);
+
+
     }
 
     public function api_index($modelname)
     {
         $this->setConfig($modelname);
-        $eager_load = $this->config->index_eager_load();
 
-        return Datatables::of( $this->config->model::query()->with($eager_load) )->toJson();
-    }    
+        // Special query for index views with info from related tables
+        if( isset($this->index_api_select) ) {
+            $eager_load = $this->config->index_eager_load();
+            return Datatables::of( $this->config->model::query()
+                       ->select($this->index_api_select)
+                       ->with($eager_load) )
+                ->toJson();
+        }
+
+        return Datatables::of( $this->config->model::query() )->toJson();
+    }
 
     public function show($modelname, $id)
     {
@@ -63,13 +59,12 @@ class BlueAdminController extends Controller
                     ->with('m', $model)
                     ->with('title', ucfirst(Str::singular($modelname)))
                     ->with('modelname', $modelname);
-    }    
+    }
 
     public function create($modelname)
 	{
-        Session::put('blueadmin.returnpath', str_replace(url('/'), '', url()->previous()) );
-
         $this->setConfig($modelname);
+        $this->setReturnPathSessionVariable();
 
         return view('BlueAdminPages::create')
         			->with('title', ucfirst(Str::singular($modelname)))
@@ -79,7 +74,8 @@ class BlueAdminController extends Controller
 
     public function create_with_prefill($modelname, $prefill_modelname, $prefill_id)
     {
-        Session::put('blueadmin.returnpath', str_replace(url('/'), '', url()->previous()) );
+        $this->setConfig($modelname);
+        $this->setReturnPathSessionVariable();
 
         $this->setConfig($prefill_modelname);
         $prefill = $this->getModel($prefill_id);
@@ -92,26 +88,32 @@ class BlueAdminController extends Controller
                     ->with('modelname', $modelname);
     }
 
-	public function store(Request $request, $modelname) 
+	public function store(Request $request, $modelname)
 	{
         $this->setConfig($modelname);
 
         $valid = $request->validate( $this->config->validation() );
+
+        // Deal with special field types that require extra attention before saving
+        /*
         foreach(array_keys($this->config->index_fields, 'boolean') as $key) {
-            $valid[$key] = array_key_exists($key, $valid) ? 1 : 0;  
+            $valid[$key] = array_key_exists($key, $valid) ? 1 : 0;
         }
 
         foreach($this->config->mediafiles() as $file) {
             unset($valid[$file]);
         }
+        */
 
         $model = $this->config->model::create($valid);
 
+        /*
         foreach($this->config->mediafiles() as $file) {
             if($request->has($file)) {
                 $model->addMediaFromRequest($file)->toMediaCollection($file);
             }
         }
+        */
 
         $returnPath = Session::get('blueadmin.returnpath', route('blueadmin.index', $modelname) );
         return redirect($returnPath);
@@ -120,9 +122,9 @@ class BlueAdminController extends Controller
 
     public function edit($modelname, $id)
     {
-        Session::put('blueadmin.returnpath', str_replace(url('/'), '', url()->previous()) );
-
         $this->setConfig($modelname);
+        $this->setReturnPathSessionVariable($id);
+
         $model = $this->getModel($id);
 
         return view('BlueAdminPages::edit')
@@ -131,23 +133,27 @@ class BlueAdminController extends Controller
         			->with('modelname', $modelname);
     }
 
-    public function update(Request $request, $modelname, $id) 
+    public function update(Request $request, $modelname, $id)
     {
     	$this->setConfig($modelname);
         $model = $this->getModel($id);
 
         $valid = $request->validate( $this->config->validation() );
 
+
+
+        // Deal with special field types that require extra attention before saving
+        /*
         // Make sure that boolean stuff is treated as boolean
 		foreach(array_keys($this->config->index_fields, 'boolean') as $key) {
-			$valid[$key] = array_key_exists($key, $valid) ? 1 : 0;	
+			$valid[$key] = array_key_exists($key, $valid) ? 1 : 0;
 		}
 /*
         // Whenever a nullable field is empty, set value to null
         foreach($this->config->nullable_fields as $key) {
             $valid[$key] = ($valid[$key] == '') ? NULL : $valid[$key];
         }*/
-
+/*
         foreach($this->config->mediafiles() as $file) {
             if($request->has($file)) {
                 optional($model->getFirstMedia($file))->delete();
@@ -155,9 +161,8 @@ class BlueAdminController extends Controller
                 unset($valid[$file]);
             }
         }
-        
+*/
         $model->update($valid);
-        //$model->save();
 
         $returnPath = Session::get('blueadmin.returnpath', route('blueadmin.index', $modelname) );
         return redirect($returnPath);
@@ -174,33 +179,52 @@ class BlueAdminController extends Controller
         return redirect($returnPath);
     }
 
+    public function toggleShowDelete($modelname, Request $request)
+    {
+        $key = 'blueadmin-'.$modelname . '-index-show-delete';
 
+        if ($request->session()->has($key)) {
+            $request->session()->forget($key);
+        } else {
+            $request->session()->put($key, true);
+        }
+
+        return redirect()->back();
+    }
+
+    public function toggleOpenNewWindow($modelname, Request $request)
+    {
+        $key = 'blueadmin-'.$modelname . '-open-new-window';
+
+        if ($request->session()->has($key)) {
+            $request->session()->forget($key);
+        } else {
+            $request->session()->put($key, true);
+        }
+
+        return redirect()->back();
+    }
 
     private function setConfig($modelname)
     {
         $CLASS = '\App\\BlueAdmin\\' . ucfirst( Str::singular($modelname));
+        $this->modelname = $modelname;
         $this->config = new $CLASS;
-    }
-
-    private function getModels()
-    {
-        if( isset($this->config->index_orderby) && !is_array($this->config->index_orderby) ) {
-            $this->config->index_orderby = ['variable' => $this->config->index_orderby, 'order' => 'ASC' ];
-        }
-
-        if(isset($this->config->index_orderby))
-            $models = $this->config->model::orderBy($this->config->index_orderby['variable'], $this->config->index_orderby['order'])->get();
-        else
-            $models = $this->config->model::all();
-
-        return $models;
     }
 
     private function getModel($id)
     {
-        $model = $this->config->model::find($id);
+        $model = $this->config->model::findOrFail($id);
         return $model;
     }
 
+    private function setReturnPathSessionVariable($id = null)
+    {
+        if ( $id === null && route('blueadmin.create', $this->modelname) === url()->previous())
+            return;
+        if ( $id !== null && route('blueadmin.edit', ['modelname' => $this->modelname, 'id' => $id]) === url()->previous() )
+            return;
 
+        Session::put('blueadmin.returnpath', str_replace(url('/'), '', url()->previous()));
+    }
 }

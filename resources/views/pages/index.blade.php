@@ -1,88 +1,47 @@
-@extends('adminlte::page')
+@extends('BlueAdminLayouts::app', ['title' => ucfirst($modelname) . ' overview'])
 
-@section('title', $title . ' | ' . config('app.name') . ' admin' )
+@section('main')
 
-@section('content_header')
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Site content
-        <small>manage your website content</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="{{ route('blueadmin.dashboard') }}"><i class="fa fa-dashboard"></i> Admin</a></li>
-        <li><a href="">Site content</a></li>
-        <li class="active">{{ $title }}</li>
-      </ol>
-    </section>
+<x-blueadmin-card :title="$title" col="col-12 col-md-7" noPadding="true">
 
-    
-@stop
-
-@section('content')
-
-<section class="content">
-      <div class="container-fluid">
-
-		<div class="row">
-          <div class="col-lg-8 col-sm-12">
-            <div class="box">
-
-              <div class="box-header">
-                <h3 class="box-title">{{$title}}</h3>
-
-                <div class="box-tools pull-right">
-
-    			        <div style="margin-top: 5px;">
-    	                @if( app('request')->input('enable_delete') )
-    	                    <a href="?" class="btn btn-xs text-muted"><i class="fas fa-toggle-on"></i>&nbsp;DELETE</a>&nbsp;&nbsp;&nbsp;
-    	                @else
-    	                    <a href="?enable_delete=true" class="btn btn-xs text-muted"><i class="fas fa-toggle-off"></i>&nbsp;DELETE</a>&nbsp;&nbsp;&nbsp;
-    	                @endif
-                    	@if(View::exists('admin.'.$modelname.'._form'))
-                    	 <a href="{{route('blueadmin.create', ['modelname' => $modelname])}}" class="btn btn-xs btn-success"><i class="far fa-plus-square"></i>&nbsp;Create</a>
-                      @endif
-    	            </div>                
+    <x-slot name="cardTools">
+        @if( Session::get('blueadmin-'.$modelname . '-index-show-delete') )
+            <a href="{{route('blueadmin.index.toggle-show-delete', ['modelname' => $modelname])}}" class="btn btn-xs text-success"><i class="fas fa-toggle-on"></i>&nbsp;SHOW DELETE</a>
+        @else
+            <a href="{{route('blueadmin.index.toggle-show-delete', ['modelname' => $modelname])}}" class="btn btn-xs text-muted"><i class="fas fa-toggle-off"></i>&nbsp;SHOW DELETE</a>
+        @endif
+            @if( Session::get('blueadmin-'.$modelname . '-open-new-window') )
+                <a href="{{route('blueadmin.index.toggle-open-new-window', ['modelname' => $modelname])}}" class="btn btn-xs text-success"><i class="fas fa-toggle-on"></i>&nbsp;OPEN ACTIONS IN NEW WINDOW</a>&nbsp;&nbsp;&nbsp;
+                @php $target = ' target="_blank" '; @endphp
+            @else
+                <a href="{{route('blueadmin.index.toggle-open-new-window', ['modelname' => $modelname])}}" class="btn btn-xs text-muted"><i class="fas fa-toggle-off"></i>&nbsp;OPEN ACTIONS IN NEW WINDOW</a>&nbsp;&nbsp;&nbsp;
+                @php $target = ' '; @endphp
+            @endif
 
 
-                </div>
-              </div><!-- ./box-header -->
+        @if(View::exists('admin.'.$modelname.'._form'))
+            <a href="{{route('blueadmin.create', ['modelname' => $modelname])}}" class="btn btn-xs btn-success"><i class="far fa-plus-square"></i>&nbsp;Create</a>
+        @endif
+    </x-slot>
 
-              <div class="box-body table-responsive p-0">
-                <table class="table table-striped table-hover table-head-fixed" id="{{$modelname}}-table">
-                  <thead>
-                    <tr>
-                      @foreach($columns as $column)
-						            <th>{{ $column->title }}</th>
-                      @endforeach
-						          <th width="215px">Actions</th>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
-
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-
-          <div class="col-12 col-md-2">
-
-            @foreach($widgets as $widget)
-              @widget($widget)
-            @endforeach
-
-          </div>
-
-
-        </div>	
-
-
+    <div class="table-responsive">
+        <table class="table table-sm table-striped table-hover table-head-fixed" id="{{$modelname}}-table">
+            <thead>
+            <tr>
+                @foreach($columns as $column)
+                    <th>{{ $column->title }}</th>
+                @endforeach
+                <th width="185px">Actions</th>
+            </tr>
+            </thead>
+        </table>
     </div>
-</section>
-@stop
 
-@section('blueadmin_header')
+</x-blueadmin-card>
+
+@endsection
+
+@push('blueadmin_header')
     <!-- DataTables stuff -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -91,7 +50,31 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-@endsection
+
+    <style>
+        .dataTables_filter {
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+
+        .dataTables_length {
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+
+        .dataTables_info {
+            margin-bottom: 10px;
+            margin-left: 10px;
+        }
+
+        .dataTables_paginate {
+            margin-bottom: 10px;
+            padding-right: 10px;
+        }
+
+
+    </style>
+@endpush
 
 <!-- DataTables -->
 @push('blueadmin_scripts')
@@ -111,7 +94,14 @@ $(function() {
         order: [{{ $initial_ordering['column'] }}, '{{ $initial_ordering['order'] }}'],
         columns: [
             @foreach($columns as $column)
-              { data: '{{$column->value}}'},
+                @switch($column->type)
+                    @case('date')
+                        { data: '{{ $column->value }}'},
+                        @break
+                    @default
+                        { data: '{{$column->value}}'},
+
+                @endswitch
             @endforeach
         ],
         columnDefs: [
@@ -126,24 +116,24 @@ $(function() {
               }
             },
             @endforeach
- 
+
             { targets: {{$actions_col_nr}},
               render: function(data, type, row) {
 
                 actionfield = '';
                 @if(View::exists('admin.'.$modelname.'.show'))
-                  actionfield = actionfield + '<span class="pull-left" style="margin-left: 5px;"><a href="{{route('blueadmin.index', ['modelname' => $modelname]) }}/' + row['id'] + '" class="btn btn-xs btn-info"><i class="far fa-sticky-note"></i>&nbsp;Details</a>&nbsp;</span>'
+                  actionfield = actionfield + '<span class="float-left" style="margin-left: 5px;"><a {{$target}} href="{{route('blueadmin.index', ['modelname' => $modelname]) }}/' + row['id'] + '" class="btn btn-xs btn-info"><i class="far fa-sticky-note"></i>&nbsp;Details</a>&nbsp;</span>'
                 @endif
 
                 @if(View::exists('admin.'.$modelname.'._form'))
-                  actionfield = actionfield + '<span class="pull-left" style="margin-left: 5px;"> <a href="{{ route('blueadmin.index', ['modelname' => $modelname]) }}/' + row['id'] + '/edit" class="btn btn-xs btn-primary pull-left"><i class="far fa-edit"></i>&nbsp;Edit</a></span>'
+                  actionfield = actionfield + '<span class="float-left" style="margin-left: 5px;"> <a {{$target}} href="{{ route('blueadmin.index', ['modelname' => $modelname]) }}/' + row['id'] + '/edit" class="btn btn-xs btn-outline-primary pull-left"><i class="far fa-edit"></i>&nbsp;Edit</a></span>'
                 @endif
 
-                @if( app('request')->input('enable_delete') )
-                  actionfield = actionfield + '<span class="pull-left" style="margin-left: 5px; margin-top: -1px;"><form method="POST" action="{{ route('blueadmin.index', ['modelname' => $modelname]) }}/' + row['id'] + '"> @method('DELETE') @csrf <button type="submit" class="btn btn-xs btn-warning"><i class="far fa-trash-alt"></i>&nbsp;Delete</button></form></span>&nbsp;'
+                @if( Session::get('blueadmin-'.$modelname . '-index-show-delete') )
+                  actionfield = actionfield + '<span class="float-left" style="margin-left: 5px; margin-top: -1px;"><form method="POST" action="{{ route('blueadmin.index', ['modelname' => $modelname]) }}/' + row['id'] + '"> @method('DELETE') @csrf <button type="submit" class="btn btn-xs btn-outline-warning"><i class="far fa-trash-alt"></i>&nbsp;Delete</button></form></span>&nbsp;'
                 @endif
 
-                return actionfield                
+                return actionfield
               }
             },
 
@@ -155,11 +145,3 @@ $(function() {
 });
 </script>
 @endpush
-
-
-
-@section('right-sidebar')
-	@includeFirst(['help.sitecontent', 'BlueAdminPages::genericHelp'])
-@stop
-
-

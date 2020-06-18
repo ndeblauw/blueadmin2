@@ -1,65 +1,27 @@
-@extends('adminlte::page')
+@extends('BlueAdminLayouts::app', ['title' => ucfirst($modelname)])
 
-@section('title', 'New ' . $title . ' | ' . config('app.name') . ' admin')
+@section('main')
 
-@section('content_header')
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Site content
-        <small>manage your website content</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="{{ route('blueadmin.dashboard') }}"><i class="fa fa-dashboard"></i> Admin</a></li>
-        <li><a href="">Site content</a></li>
-        <li class="active">Pages</li>
-      </ol>
-    </section>
-@stop
+    <form role="form" action="{{ route('blueadmin.store', ['modelname' => $modelname]) }}" method="POST" class="horizontal" enctype="multipart/form-data">
 
+        <x-blueadmin-card :title="'Create new <strong>'.$title . '</strong> record'" icon="far fa-plus-square" col="col-12 col-md-7">
 
-@section('content')
+            @csrf
+            @include('admin.' . $modelname .'._form', ['ba_form_create' => true])
 
-<section class="content">
-  <div class="container-fluid">
+            <x-slot name="cardTools">
+                <span class="font-weight-light">Fields with a <span class="text-primary">*</span> are required</span>
+            </x-slot>
 
-		<div class="row">
-      <div class="col-lg-8">
-
-          <div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title"><i class="far fa-plus-square"></i>&nbsp;Add a new <strong>{{$title}}</strong></h3>
-            </div><!-- /.box-header -->
-
-            <form role="form" action="{{ route('blueadmin.store', ['modelname' => $modelname]) }}" method="POST" class="horizontal" enctype="multipart/form-data">
-
-              <div class="box-body">
-                @csrf
-
-
-                @include('admin.' . $modelname .'._form')
-
-              </div><!-- /.box-body -->
-
-              <div class="box-footer" style="background-color: #dfe6ee">
-                <div class="pull-right">
-                  <a href="{{ route('blueadmin.index', ['modelname' => $modelname]) }}" class="btn btn-default">Cancel</a>&nbsp;&nbsp;
-                  <button type="submit" class="btn btn-primary">Add</button>
+            <x-slot name="footer">
+                <div class="float-right">
+                    <a href="{{ route('blueadmin.index', ['modelname' => $modelname]) }}" class="btn btn-default">Cancel</a>&nbsp;&nbsp;
+                    <button type="submit" class="btn btn-primary">Create</button>
                 </div>
-              </div><!-- /.box-footer -->
-            
-            </form>
-          </div><!-- /.box -->
+            </x-slot>
 
-      </div>
+        </x-blueadmin-card>
 
-    </div>	
+    </form>
 
-  </div>
-</section>
-@stop
-
-
-@section('right-sidebar')
-	@includeFirst(['help.sitecontent', 'BlueAdminPages::genericHelp'])
-@stop
+@endsection

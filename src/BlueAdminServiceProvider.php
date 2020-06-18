@@ -8,31 +8,48 @@ use Illuminate\Support\ServiceProvider;
 
 class BlueAdminServiceProvider extends ServiceProvider
 {
-    /**
-     * Register services.
-     *
-     * @return void
-     */
     public function register()
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views/components/formelements', 'BlueAdminFormElements');
+        // Get the configuration (and include changes from config/blueadmin.php)
+        $this->mergeConfigFrom( $this->getConfigFile(), 'blueadmin' );
+
+        // Building blocks for the lay-out
+        $this->loadViewsFrom(__DIR__.'/../resources/views/components/template', 'BlueAdminTemplate');
+        $this->loadViewsFrom(__DIR__.'/../resources/views/layouts', 'BlueAdminLayouts');
+        $this->loadViewsFrom(__DIR__.'/../resources/views/components', 'BlueAdminComponents');
+
+        // Pages for the generic BlueAdminController
         $this->loadViewsFrom(__DIR__.'/../resources/views/pages', 'BlueAdminPages');
     }
 
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
     public function boot()
     {
-        include __DIR__.'/routes.php';
+        // For the template
+        Blade::component('blueadmin-leftmenu', View\Components\Layout\LeftMenu::class);
+        Blade::component('blueadmin-topbar-menu', View\Components\Layout\TopbarMenu::class);
+        Blade::component('blueadmin-topbar-messages', View\Components\Layout\TopbarMessages::class);
+        Blade::component('blueadmin-topbar-notifications', View\Components\Layout\TopbarNotifications::class);
 
-        Blade::directive('widget', function ($expression) {
-            $name = trim($expression, "'");
-            return "<?= resolve({$name})->loadView(); ?>";
-        });
+        // Building blocks for admin lay-outs
+        Blade::component('blueadmin-card', View\Components\Blocks\Card::class);
 
+        // Building blocks for admin forms
+        Blade::component('ba-text', View\Components\FormElements\Textfield::class);
+        Blade::component('ba-textarea', View\Components\FormElements\Textarea::class);
+        Blade::component('ba-select', View\Components\FormElements\Select::class);
+        Blade::component('ba-radiobuttons', View\Components\FormElements\Radiobuttons::class);
+        Blade::component('ba-checkboxes', View\Components\FormElements\Checkboxes::class);
+        Blade::component('ba-boolean', View\Components\FormElements\Boolean::class);
+        Blade::component('ba-datepicker', View\Components\FormElements\Datepicker::class);
+
+        Blade::component('ba-belongsto', View\Components\FormElements\BelongsTo::class);
+
+
+        // For publishing the configuration file
+        $this->publishes([ $this->getConfigFile() => config_path('blueadmin.php') ], 'config');
+
+
+/*
         BladeX::component('BlueAdminFormElements::text')->tag('form-text');
         BladeX::component('BlueAdminFormElements::textarea')->tag('form-textarea');
         BladeX::component('BlueAdminFormElements::switch')->tag('form-switch');
@@ -43,5 +60,11 @@ class BlueAdminServiceProvider extends ServiceProvider
         BladeX::component('BlueAdminFormElements::select2')->tag('form-select2');
 
         BladeX::component('BlueAdminFormElements::mediafile')->tag('form-mediafile');
+*/
+    }
+
+    protected function getConfigFile(): string
+    {
+        return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'blueadmin.php';
     }
 }

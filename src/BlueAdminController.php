@@ -94,10 +94,9 @@ class BlueAdminController extends Controller
 
         $valid = $request->validate( $this->config->validation() );
 
-        // Deal with special field types that require extra attention before saving
-        /*
-        foreach(array_keys($this->config->index_fields, 'boolean') as $key) {
-            $valid[$key] = array_key_exists($key, $valid) ? 1 : 0;
+        // Make sure that boolean stuff is treated as boolean
+        foreach (collect($this->config->fields)->where('type','boolean')->keys() as $key) {
+            $valid[$key] = array_key_exists($key, $valid) ? true : false;
         }
 
         // Taking care of mediafiles - part 1
@@ -141,6 +140,11 @@ class BlueAdminController extends Controller
 
         $valid = $request->validate( $this->config->validation() );
 
+        // Make sure that boolean stuff is treated as boolean
+        foreach (collect($this->config->fields)->where('type','boolean')->keys() as $key) {
+            $valid[$key] = array_key_exists($key, $valid) ? true : false;
+        }
+
         // Taking care of mediafiles
         foreach (collect($this->config->fields)->where('type','mediafile')->keys() as $file) {
             if($request->has($file)) {
@@ -153,10 +157,6 @@ class BlueAdminController extends Controller
 
         // Deal with special field types that require extra attention before saving
         /*
-        // Make sure that boolean stuff is treated as boolean
-		foreach(array_keys($this->config->index_fields, 'boolean') as $key) {
-			$valid[$key] = array_key_exists($key, $valid) ? 1 : 0;
-		}
 /*
         // Whenever a nullable field is empty, set value to null
         foreach($this->config->nullable_fields as $key) {

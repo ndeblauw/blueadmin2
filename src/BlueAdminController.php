@@ -100,20 +100,21 @@ class BlueAdminController extends Controller
             $valid[$key] = array_key_exists($key, $valid) ? 1 : 0;
         }
 
-        foreach($this->config->mediafiles() as $file) {
-            unset($valid[$file]);
+        // Taking care of mediafiles - part 1
+        foreach (collect($this->config->fields)->where('type','mediafile')->keys() as $file) {
+            if($request->has($file)) {
+                unset($valid[$file]);
+            }
         }
-        */
 
         $model = $this->config->model::create($valid);
 
-        /*
-        foreach($this->config->mediafiles() as $file) {
+        // Taking care of mediafiles - part 2
+        foreach (collect($this->config->fields)->where('type','mediafile')->keys() as $file) {
             if($request->has($file)) {
                 $model->addMediaFromRequest($file)->toMediaCollection($file);
             }
         }
-        */
 
         $returnPath = Session::get('blueadmin.returnpath', route('blueadmin.index', $modelname) );
         return redirect($returnPath);
@@ -140,6 +141,14 @@ class BlueAdminController extends Controller
 
         $valid = $request->validate( $this->config->validation() );
 
+        // Taking care of mediafiles
+        foreach (collect($this->config->fields)->where('type','mediafile')->keys() as $file) {
+            if($request->has($file)) {
+                optional($model->getFirstMedia($file))->delete();
+                $model->addMediaFromRequest($file)->toMediaCollection($file);
+                unset($valid[$file]);
+            }
+        }
 
 
         // Deal with special field types that require extra attention before saving
@@ -153,15 +162,7 @@ class BlueAdminController extends Controller
         foreach($this->config->nullable_fields as $key) {
             $valid[$key] = ($valid[$key] == '') ? NULL : $valid[$key];
         }*/
-/*
-        foreach($this->config->mediafiles() as $file) {
-            if($request->has($file)) {
-                optional($model->getFirstMedia($file))->delete();
-                $model->addMediaFromRequest($file)->toMediaCollection($file);
-                unset($valid[$file]);
-            }
-        }
-*/
+
         $model->update($valid);
 
         $returnPath = Session::get('blueadmin.returnpath', route('blueadmin.index', $modelname) );

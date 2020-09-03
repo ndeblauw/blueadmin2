@@ -5,6 +5,6 @@
     </span>
 @elseif( $comment ?? null)
     <span class="text-secondary mt-5 ml-2" style="font-weight: 300;">
-         {{$comment ?? ''}}
+         {!! $comment ?? '' !!}
     </span>
 @endif

@@ -4,7 +4,7 @@ namespace Ndeblauw\BlueAdmin;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Yajra\Datatables\Datatables;
+use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
@@ -39,10 +39,10 @@ class BlueAdminController extends Controller
         $this->setConfig($modelname);
 
         // Special query for index views with info from related tables
-        if( isset($this->index_api_select) ) {
+        if( isset($this->config->index_api_select) ) {
             $eager_load = $this->config->index_eager_load();
             return Datatables::of( $this->config->model::query()
-                       ->select($this->index_api_select)
+                       ->select($this->config->index_api_select)
                        ->with($eager_load) )
                 ->toJson();
         }

@@ -2,31 +2,26 @@
 
 namespace Ndeblauw\BlueAdmin\View\Components\FormElements;
 
-use Illuminate\View\Component;
-
 class Select extends Component
 {
-    public $id;
-    public $value;
-    public $legend;
-    public $size;
+    const TEMPLATE = 'select';
+
     public $options;
-    public $name;
-    public $required;
+    public $allowNullOption;
 
-    public function __construct($name, $options, $value = null, $legend = null, $size = null, $id = null, $model = null, $required = null)
-    {
-        $this->id = $id;
-        $this->legend = $legend ?? ucfirst($name);
-        $this->value = $model->$name ?? ($value ?? '');
-        $this->size = $size ?? 'col-12 col-md-6';
+    public function __construct(
+        string $name,
+        string $label = null,
+        string $comment = null,
+        string $id = null,
+        bool $required = false,
+        string $size = null,
+        string $value = null,
+        array $options,
+        bool $allowNullOption = false
+    ) {
+        parent::__construct($name, $label, null, $id, $comment, $required, $size, $value);
         $this->options = $options;
-        $this->name = $name;
-        $this->required = $required ? '<span class="text-primary">*</span>' : '';
-    }
-
-    public function render()
-    {
-        return view('BlueAdminComponents::formelements.select');
+        $this->allowNullOption = ($allowNullOption) ? true : false;
     }
 }

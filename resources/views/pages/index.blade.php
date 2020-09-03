@@ -10,14 +10,14 @@
         @else
             <a href="{{route('blueadmin.index.toggle-show-delete', ['modelname' => $modelname])}}" class="btn btn-xs text-muted"><i class="fas fa-toggle-off"></i>&nbsp;SHOW DELETE</a>
         @endif
-            @if( Session::get('blueadmin-'.$modelname . '-open-new-window') )
-                <a href="{{route('blueadmin.index.toggle-open-new-window', ['modelname' => $modelname])}}" class="btn btn-xs text-success"><i class="fas fa-toggle-on"></i>&nbsp;OPEN ACTIONS IN NEW WINDOW</a>&nbsp;&nbsp;&nbsp;
-                @php $target = ' target="_blank" '; @endphp
-            @else
-                <a href="{{route('blueadmin.index.toggle-open-new-window', ['modelname' => $modelname])}}" class="btn btn-xs text-muted"><i class="fas fa-toggle-off"></i>&nbsp;OPEN ACTIONS IN NEW WINDOW</a>&nbsp;&nbsp;&nbsp;
-                @php $target = ' '; @endphp
-            @endif
 
+        @if( Session::get('blueadmin-'.$modelname . '-open-new-window') )
+            <a href="{{route('blueadmin.index.toggle-open-new-window', ['modelname' => $modelname])}}" class="btn btn-xs text-success"><i class="fas fa-toggle-on"></i>&nbsp;OPEN ACTIONS IN NEW WINDOW</a>&nbsp;&nbsp;&nbsp;
+            @php $target = ' target="_blank" '; @endphp
+        @else
+            <a href="{{route('blueadmin.index.toggle-open-new-window', ['modelname' => $modelname])}}" class="btn btn-xs text-muted"><i class="fas fa-toggle-off"></i>&nbsp;OPEN ACTIONS IN NEW WINDOW</a>&nbsp;&nbsp;&nbsp;
+            @php $target = ' '; @endphp
+        @endif
 
         @if(View::exists('admin.'.$modelname.'._form'))
             <a href="{{route('blueadmin.create', ['modelname' => $modelname])}}" class="btn btn-xs btn-success"><i class="far fa-plus-square"></i>&nbsp;Create</a>
@@ -31,7 +31,7 @@
                 @foreach($columns as $column)
                     <th>{{ $column->title }}</th>
                 @endforeach
-                <th width="185px">Actions</th>
+                <th width="{{ ($modelname == 'users') ? '250px' : '185px' }}">Actions</th>
             </tr>
             </thead>
         </table>
@@ -123,6 +123,10 @@ $(function() {
                 actionfield = '';
                 @if(View::exists('admin.'.$modelname.'.show'))
                   actionfield = actionfield + '<span class="float-left" style="margin-left: 5px;"><a {{$target}} href="{{route('blueadmin.index', ['modelname' => $modelname]) }}/' + row['id'] + '" class="btn btn-xs btn-info"><i class="far fa-sticky-note"></i>&nbsp;Details</a>&nbsp;</span>'
+                @endif
+
+                @if($modelname == 'users')
+                    actionfield = actionfield + '<span class="float-left" style="margin-left: 5px;"> <a href="/admin/users/' + row['id'] + '/loginas" class="btn btn-xs btn-warning pull-left"><i class="fas fa-sign-in-alt"></i>&nbsp;Login as</a></span>'
                 @endif
 
                 @if(View::exists('admin.'.$modelname.'._form'))

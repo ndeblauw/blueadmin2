@@ -8,7 +8,10 @@
 
             @csrf
             @method('PUT')
-            @include('admin.' . $modelname .'._form')
+
+            @bind($m ?? null)
+                @include('admin.' . $modelname .'._form')
+            @endbind
 
             <x-slot name="cardTools">
                 <span class="font-weight-light">Fields with a <span class="text-primary">*</span> are required</span>

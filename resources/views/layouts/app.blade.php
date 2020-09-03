@@ -28,6 +28,7 @@
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
         <x-blueadmin-topbar-menu/>
         <ul class="navbar-nav ml-auto">
+            @include('BlueAdminLayouts::partials.topbar.logout')
             <x-blueadmin-topbar-messages/>
             <x-blueadmin-topbar-notifications/>
 

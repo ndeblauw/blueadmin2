@@ -20,6 +20,7 @@ class BlueAdmin {
         Route::get('{modelname}/{id}/edit', '\Ndeblauw\BlueAdmin\BlueAdminController@edit')->name('blueadmin.edit');
         Route::put('{modelname}/{id}', '\Ndeblauw\BlueAdmin\BlueAdminController@update')->name('blueadmin.update');
         Route::delete('{modelname}/{id}', '\Ndeblauw\BlueAdmin\BlueAdminController@destroy')->name('blueadmin.destroy');
+        Route::get('{modelname}/{id}/delete', '\Ndeblauw\BlueAdmin\BlueAdminController@destroy')->name('blueadmin.destroy.get');
 
         //
         Route::get('api/v1/{modelname}', '\Ndeblauw\BlueAdmin\BlueAdminController@api_index')->name('blueadmin.api.index');

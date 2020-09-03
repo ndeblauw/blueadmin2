@@ -2,35 +2,27 @@
 
 namespace Ndeblauw\BlueAdmin\View\Components\FormElements;
 
-use Illuminate\View\Component;
-
 class BelongsTo extends Component
 {
-    public $id;
-    public $value;
-    public $legend;
-    public $size;
+    const TEMPLATE = 'select';
     public $options;
-    public $name;
-    public $required;
+    public $allowNullOption;
 
-    public function __construct($name, $options = null, $source = null, $value = null, $legend = null, $size = null, $id = null, $model = null, $required = null)
-    {
-        $source = "\\App\\BlueAdmin\\" . $source;
-        $field = $name . '_id';
-        $this->id = $id;
-        $this->legend = $legend ?? ucfirst($name);
-        $this->name = $field;
-        $this->value = $model->$field ?? ($value ?? '');
-        $this->size = $size ?? 'col-12 col-md-6';
-
-        $this->options = $options ?? $source::getSelectValues();
-        $this->required = $required ? '<span class="text-primary">*</span>' : '';
-
-    }
-
-    public function render()
-    {
-        return view('BlueAdminComponents::formelements.select');
+    public function __construct(
+        string $name,
+        string $label = null,
+        string $comment = null,
+        string $id = null,
+        bool $required = false,
+        string $size = null,
+        string $value = null,
+        $options = null,
+        $source = null,
+        $allowNullOption = null
+    ) {
+        $name = $name.'_id';
+        parent::__construct($name, $label, null, $id, $comment, $required, $size, $value);
+        $this->options = $options ?? $this->getOptionsFromSource($source);
+        $this->allowNullOption = (isset($allowNullOption)) ? true : false;
     }
 }

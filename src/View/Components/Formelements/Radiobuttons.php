@@ -2,31 +2,28 @@
 
 namespace Ndeblauw\BlueAdmin\View\Components\FormElements;
 
-use Illuminate\View\Component;
-
 class Radiobuttons extends Component
 {
-    public $name;
-    public $legend;
-    public $size;
-    public $value;
+    const TEMPLATE = 'radiobuttons';
+
     public $options;
-    public $required;
     public $inline;
 
-    public function __construct($name, $options, $legend = null, $size = null, $value = null, $required = null, $model= null, $inline = null)
-    {
-        $this->name = $name;
-        $this->legend = $legend ?? ucfirst($name);
-        $this->size = $size ?? 'col-12 col-md-6';
-        $this->value = $value ?? ($model->$name ?? '');
-        $this->options = $options;
-        $this->required = $required ? '<span class="text-primary">*</span>' : '';
-        $this->inline = $inline ? true : false;
-    }
+    public function __construct(
+        string $name,
+        string $label = null,
+        string $comment = null,
+        string $id = null,
+        bool $required = false,
+        string $size = null,
+        string $value = null,
+        bool $inline = false,
 
-    public function render()
-    {
-        return view('BlueAdminComponents::formelements.radiobuttons');
+        $options = null,
+        $source = null
+    ) {
+        parent::__construct($name, $label, null, $id, $comment, $required, $size, $value);
+        $this->inline = $inline ? true : false;
+        $this->options = $options ?? $this->getOptionsFromSource($source);
     }
 }

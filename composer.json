@@ -1,11 +1,11 @@
 {
-    "name": "ndeblauw/blueadmin",
+    "name": "ndeblauw/blueadmin2",
     "description": "Admin backend",
     "license": "proprietary",
     "repositories":[
     {
         "type": "vcs",
-        "url" : "git@bitbucket.org:ndeblauw/blueadmin.git"
+        "url" : "git@bitbucket.org:ndeblauw/blueadmin2.git"
     }
     ],
     "authors": [
@@ -17,7 +17,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "laravel/framework": "~7.0",
         "yajra/laravel-datatables-oracle": "~9.0",
         "iatstuti/laravel-cascade-soft-deletes": "^3.0",

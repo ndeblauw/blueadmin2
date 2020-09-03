@@ -3,7 +3,7 @@
 
     <!-- Brand Logo -->
     <a href="{{ config('app.url') }}" class="brand-link">
-        <span class="brand-text font-weight-light">{{config('app.name')}}</span>
+        <span class="brand-text font-weight-light">{{ config('blueadmin.name', Str::limit( config('app.name'), 20) ) }}</span>
         <img src="{{ asset('lteadmin/images/bluepundit_logo.png')}}"
              alt="AdminLTE Logo"
              class="brand-image img-circle elevation-3"

@@ -1,6 +1,6 @@
 <div class="{{ $size }}">
     <div class="form-group">
-        <label for="{{ $name }}">{!! $legend !!}&nbsp;{!! $required  !!}</label>
+        <label for="{{ $name }}">{!! $label !!}&nbsp;{!! $required  !!}</label>
         @if($inline)<br/>@endif
         @foreach($options as $option => $label)
             <div class="form-check @if($inline)form-check-inline @endif">

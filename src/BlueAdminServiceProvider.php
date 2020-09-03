@@ -5,6 +5,7 @@ namespace Ndeblauw\BlueAdmin;
 use Spatie\BladeX\Facades\BladeX;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Ndeblauw\BlueAdmin\FormDataBinder;
 
 class BlueAdminServiceProvider extends ServiceProvider
 {
@@ -12,6 +13,9 @@ class BlueAdminServiceProvider extends ServiceProvider
     {
         // Get the configuration (and include changes from config/blueadmin.php)
         $this->mergeConfigFrom( $this->getConfigFile(), 'blueadmin' );
+
+        // For data binding
+        $this->app->singleton(FormDataBinder::class, fn () => new FormDataBinder);
 
         // Building blocks for the lay-out
         $this->loadViewsFrom(__DIR__.'/../resources/views/components/template', 'BlueAdminTemplate');
@@ -24,6 +28,14 @@ class BlueAdminServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        Blade::directive('bind', function ($bind) {
+            return '<?php app(Ndeblauw\BlueAdmin\FormDataBinder::class)->bind(' . $bind . '); ?>';
+        });
+
+        Blade::directive('endbind', function () {
+            return '<?php app(Ndeblauw\BlueAdmin\FormDataBinder::class)->pop(); ?>';
+        });
+
         // For the template
         Blade::component('blueadmin-leftmenu', View\Components\Layout\LeftMenu::class);
         Blade::component('blueadmin-topbar-menu', View\Components\Layout\TopbarMenu::class);
@@ -32,8 +44,10 @@ class BlueAdminServiceProvider extends ServiceProvider
 
         // Building blocks for admin lay-outs
         Blade::component('blueadmin-card', View\Components\Blocks\Card::class);
+        Blade::component('ba-infopanel-text', View\Components\Blocks\InfopanelText::class);
 
         // Building blocks for admin forms
+        Blade::component('ba-info', View\Components\FormElements\Info::class);
         Blade::component('ba-text', View\Components\FormElements\Textfield::class);
         Blade::component('ba-textarea', View\Components\FormElements\Textarea::class);
         Blade::component('ba-select', View\Components\FormElements\Select::class);

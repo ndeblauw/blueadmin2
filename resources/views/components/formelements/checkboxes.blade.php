@@ -1,6 +1,7 @@
 <div class="{{$size}}">
     <div class="form-group">
-        <label for="{{$legend}}">{{$legend}}{!! $required !!}</label>
+        <label for="{{$name}}">{{$label}}{!! $required !!}</label>
+        @if($inline) inlien komt @endif
         @foreach($options as $optionValue => $optionLabel)
             <div class="form-check">
                 <label class="form-check-label">

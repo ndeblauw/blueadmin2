@@ -1,6 +1,6 @@
 <div class="{{ $size }}">
     <div class="form-group">
-        <label for="{{ $name }}">{!! $legend !!}&nbsp;{!! $required  !!}</label>
+        <label for="{{ $name }}">{!! $label !!}&nbsp;{!! $required  !!}</label>
         <input
             type="{{ $type }}"
             name="{{ $name }}"

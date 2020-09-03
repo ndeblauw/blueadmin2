@@ -2,31 +2,20 @@
 
 namespace Ndeblauw\BlueAdmin\View\Components\FormElements;
 
-use Illuminate\View\Component;
-
 class Textarea extends Component
 {
-    public $name;
-    public $id;
-    public $legend;
-    public $placeholder;
-    public $value;
-    public $size;
-    public $required;
+    const TEMPLATE = 'textarea';
 
-    public function __construct($name, $id = null, $legend = null, $placeholder = null, $value = null, $size = null, $model = null, $required = null)
-    {
-        $this->name = $name;
-        $this->id = $id ?? $name;
-        $this->legend = $legend ?? ucfirst($name);
-        $this->placeholder = $placeholder;
-        $this->size = $size ?? 'col-12';
-        $this->required = $required ? '<span class="text-primary">*</span>' : '';
-        $this->value = $model->$name ?? ($value ?? '');
-    }
-
-    public function render()
-    {
-        return view('BlueAdminComponents::formelements.textarea');
+    public function __construct(
+        string $name,
+        string $label = null,
+        string $placeholder = null,
+        string $comment = null,
+        string $id = null,
+        bool $required = false,
+        string $size = null,
+        string $value = null
+    ) {
+        parent::__construct($name, $label, $placeholder, $id, $comment, $required, $size, $value);
     }
 }

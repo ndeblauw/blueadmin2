@@ -23,7 +23,7 @@ trait HandlesBoundModel
      * Get the latest bound target.
      * @return mixed
      */
-    private function getBoundTarget()
+    protected function getBoundTarget()
     {
         return $this->getFormDataBinder()->get();
     }

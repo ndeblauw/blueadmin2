@@ -48,6 +48,7 @@ class BlueAdminServiceProvider extends ServiceProvider
 
         // Building blocks for admin forms
         Blade::component('ba-info', View\Components\FormElements\Info::class);
+        Blade::component('ba-hidden', View\Components\FormElements\Hidden::class);
         Blade::component('ba-text', View\Components\FormElements\Textfield::class);
         Blade::component('ba-textarea', View\Components\FormElements\Textarea::class);
         Blade::component('ba-select', View\Components\FormElements\Select::class);

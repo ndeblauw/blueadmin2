@@ -19,7 +19,13 @@ class Info extends Component
         string $link = null,
         bool $newWindow = false,
         bool $icon = false
-    ) {
+    )
+    {
+        // Check if there is a belongsTo relation (name = relation.fieldname)
+        if (sizeof($arr=explode(".", $name, 2)) > 1) {
+            $value = $value ?: $this->getBoundTarget()->{$arr[0]}->{$arr[1]};
+        }
+
         parent::__construct($name, $label, null, $id, $comment, null, $size, $value);
 
         $this->link = $link ?? '';

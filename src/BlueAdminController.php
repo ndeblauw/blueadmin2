@@ -61,32 +61,19 @@ class BlueAdminController extends Controller
                     ->with('modelname', $modelname);
     }
 
-    public function create($modelname)
+    public function create(Request $request, $modelname)
 	{
         $this->setConfig($modelname);
         $this->setReturnPathSessionVariable();
+
+        if ($this->dealWithPrefillInputs($request)) {
+            return redirect()->route('blueadmin.create', ['modelname' => $modelname]);
+        }
 
         return view('BlueAdminPages::create')
         			->with('title', ucfirst(Str::singular($modelname)))
         			->with('modelname', $modelname);
 	}
-
-
-    public function create_with_prefill($modelname, $prefill_modelname, $prefill_id)
-    {
-        $this->setConfig($modelname);
-        $this->setReturnPathSessionVariable();
-
-        $this->setConfig($prefill_modelname);
-        $prefill = $this->getModel($prefill_id);
-
-        $this->setConfig($modelname);
-
-        return view('BlueAdminPages::create')
-                    ->with('title', ucfirst(Str::singular($modelname)))
-                    ->with('prefill', $prefill)
-                    ->with('modelname', $modelname);
-    }
 
 	public function store(Request $request, $modelname)
 	{
@@ -227,5 +214,15 @@ class BlueAdminController extends Controller
             return;
 
         Session::put('blueadmin.returnpath', str_replace(url('/'), '', url()->previous()));
+    }
+
+
+    private function dealWithPrefillInputs($request):bool
+    {
+        if($request->missing('prefill'))
+            return false;
+
+        Session::flash('prefill', $request->prefill);
+        return true;
     }
 }

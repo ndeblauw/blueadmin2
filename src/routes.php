@@ -15,8 +15,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web','auth']], function () 
 
 	// Specialized routes
 	Route::get('{modelname}/{id}/destroy', 'Ndeblauw\BlueAdmin\BlueAdminController@destroy')->name('blueadmin.destroy.get');
-
-	Route::get('{modelname}/create/prefill/{prefill_modelname}/{prefill_id}', 'Ndeblauw\BlueAdmin\BlueAdminController@create_with_prefill')->name('blueadmin.create.prefill');
 });
 */
 

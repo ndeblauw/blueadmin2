@@ -2,6 +2,7 @@
 
 namespace Ndeblauw\BlueAdmin\View\Components\FormElements;
 
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\Component as BaseComponent;
 
 abstract class Component extends BaseComponent
@@ -24,6 +25,12 @@ abstract class Component extends BaseComponent
 
     public function __construct($name, $label, $placeholder, $id, $comment, $required, $size, $value, $bind = null)
     {
+        // If ?prefil[name]=xxx in url, prefill the field - only if no value was explicitly given
+        $prefill = Session::get('prefill', false);
+        if (is_null($value) && $prefill) {
+            $value = array_key_exists($name, $prefill) ? $prefill[$name] : $value;
+        }
+
         $this->name = $name;
         $this->label = $label ?? ucfirst($name);
         $this->placeholder = $placeholder ?? '';

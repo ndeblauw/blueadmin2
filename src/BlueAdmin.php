@@ -28,8 +28,5 @@ class BlueAdmin {
         // Auxiliary routes for blueadmin functionality
         Route::get('blueadmin/toggle-show-delete/{modelname}/', '\Ndeblauw\BlueAdmin\BlueAdminController@toggleShowDelete')->name('blueadmin.index.toggle-show-delete');
         Route::get('blueadmin/toggle-open-new-window/{modelname}', '\Ndeblauw\BlueAdmin\BlueAdminController@toggleOpenNewWindow')->name('blueadmin.index.toggle-open-new-window');
-
-        // Specialized routes
-        Route::get('{modelname}/{id}/destroy', '\Ndeblauw\BlueAdmin\BlueAdminController@destroy')->name('blueadmin.destroy.get');
     }
 }

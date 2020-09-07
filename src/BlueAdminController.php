@@ -41,29 +41,17 @@ class BlueAdminController extends Controller
         $mapper = $this->config->index_columns()->where('type', 'belongsto')->values();
         $model = $this->config->model::with($mapper->pluck('value')->toArray());
 
-        switch ($mapper->count()) {
-            case 0:
-                return DataTables::eloquent($model)->toJson();
+        $datatablesObject = DataTables::eloquent($model);
 
-            case 1:
-                return DataTables::eloquent($model)
-                    ->addColumn($mapper->get(0)->value, function ($item) use ($mapper) {
-                        $key = $mapper->get(0)->value;
-                        $field = $mapper->get(0)->field;
-                        return $item->$key->$field;
-                    })->toJson();
-            case 2:
-                return DataTables::eloquent($model)
-                    ->addColumn($mapper->get(0)->value, function ($item) use ($mapper) {
-                        $key = $mapper->get(0)->value;
-                        $field = $mapper->get(0)->field;
-                        return $item->$key->$field;
-                    })->addColumn($mapper->get(1)->value, function ($item) use ($mapper) {
-                        $key = $mapper->get(1)->value;
-                        $field = $mapper->get(1)->field;
-                        return $item->$key->$field;
-                    })->toJson();
+        foreach($mapper as $map) {
+            $dataTablesObject = $datatablesObject->addColumn($map->value, function ($item) use ($map) {
+                $key = $map->value;
+                $field = $map->field;
+                return $item->$key->$field;
+            });
         }
+
+        return $datatablesObject->toJson();
     }
 
     public function show($modelname, $id)

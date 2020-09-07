@@ -86,6 +86,8 @@
 
 @push('blueadmin_scripts')
 <script>
+
+
 $(function() {
     $('#{{$modelname}}-table').DataTable({
         processing: true,
@@ -98,9 +100,11 @@ $(function() {
                     @case('date')
                         { data: '{{ $column->value }}'},
                         @break
+                    @case('belongsto')
+                        { data: '{{ $column->value }}', name: '{{ $column->value }}.{{ $column->field }}' },
+                        @break
                     @default
                         { data: '{{$column->value}}'},
-
                 @endswitch
             @endforeach
         ],

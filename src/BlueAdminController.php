@@ -38,16 +38,32 @@ class BlueAdminController extends Controller
     {
         $this->setConfig($modelname);
 
-        // Special query for index views with info from related tables
-        if( isset($this->config->index_api_select) ) {
-            $eager_load = $this->config->index_eager_load();
-            return Datatables::of( $this->config->model::query()
-                       ->select($this->config->index_api_select)
-                       ->with($eager_load) )
-                ->toJson();
-        }
+        $mapper = $this->config->index_columns()->where('type', 'belongsto')->values();
+        $model = $this->config->model::with($mapper->pluck('value')->toArray());
 
-        return Datatables::of( $this->config->model::query() )->toJson();
+        switch ($mapper->count()) {
+            case 0:
+                $model = $this->config->model;
+                return DataTables::eloquent($model)->toJson();
+            case 1:
+                return DataTables::eloquent($model)
+                    ->addColumn($mapper->get(0)->value, function ($item) use ($mapper) {
+                        $key = $mapper->get(0)->value;
+                        $field = $mapper->get(0)->field;
+                        return $item->$key->$field;
+                    })->toJson();
+            case 2:
+                return DataTables::eloquent($model)
+                    ->addColumn($mapper->get(0)->value, function ($item) use ($mapper) {
+                        $key = $mapper->get(0)->value;
+                        $field = $mapper->get(0)->field;
+                        return $item->$key->$field;
+                    })->addColumn($mapper->get(1)->value, function ($item) use ($mapper) {
+                        $key = $mapper->get(1)->value;
+                        $field = $mapper->get(1)->field;
+                        return $item->$key->$field;
+                    })->toJson();
+        }
     }
 
     public function show($modelname, $id)

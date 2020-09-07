@@ -25,6 +25,7 @@ class BlueAdminModel {
                     'value' => $field,
                     'type' => $details['type'],
                     'format' => $details['format'] ?? '',
+                    'field' => $details['field'] ?? null,
                 ];
             }
             return collect($columns);

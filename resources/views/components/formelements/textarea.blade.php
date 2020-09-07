@@ -7,6 +7,7 @@
             rows="6"
             placeholder="{{ $placeholder }}"
             class="form-control form-control {{ ($errors->first($name) ? "is-invalid" : "") }}"
+            {{$disabled}}
         >{{ old($name, $value) }}</textarea>
         @include('BlueAdminComponents::formelements._errorandcomment')
     </div>

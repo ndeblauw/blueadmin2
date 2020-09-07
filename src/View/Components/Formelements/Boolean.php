@@ -14,11 +14,12 @@ class Boolean extends Component
         string $comment = null,
         string $id = null,
         bool $required = false,
+        bool $disabled = false,
         string $size = null,
         string $value = null,
         string $legend = null
     ) {
-        parent::__construct($name, $label, $placeholder, $id, $comment, $required, $size, $value);
+        parent::__construct($name, $label, $placeholder, $id, $comment, $required, $size, $value, $disabled);
         $this->legend = $legend ?? '';
     }
 }

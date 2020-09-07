@@ -11,6 +11,7 @@ abstract class Component extends BaseComponent
 
     const TEMPLATE = '';
     const REQUIRED = '<span class="text-primary">*</span>';
+    const DISABLED = ' disabled';
     const SIZE = 'col-12 col-md-6';
 
     public string $name;
@@ -20,10 +21,11 @@ abstract class Component extends BaseComponent
     public string $comment;
     public string $required;
     public string $size;
+    public string $disabled;
     public $model;
     public $value;
 
-    public function __construct($name, $label, $placeholder, $id, $comment, $required, $size, $value, $bind = null)
+    public function __construct($name, $label, $placeholder, $id, $comment, $required, $size, $value, $disabled = false, $bind = null)
     {
         // If ?prefil[name]=xxx in url, prefill the field - only if no value was explicitly given
         $prefill = Session::get('prefill', false);
@@ -40,8 +42,14 @@ abstract class Component extends BaseComponent
         $this->required = $required ? $this::REQUIRED : '';
         $this->size = $size===null ? $this::SIZE : $size;
 
-        $this->model = $this->getBoundTarget();
-        $this->value = $value ?: $this->getBoundValue($bind, $name);
+        $this->disabled = $disabled ? $this::DISABLED : '';
+
+        if( basename(request()->path()) == 'create') {
+            $this->value = $value;
+        } else {
+            $this->model = $this->getBoundTarget();
+            $this->value = $value ?: $this->getBoundValue($bind, $name);
+        }
     }
 
     public function render()

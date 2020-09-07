@@ -12,9 +12,10 @@ class MediaFile extends Component
         string $comment = null,
         string $id = null,
         bool $required = false,
+        bool $disabled = false,
         string $size = null,
         string $value = null
     ) {
-        parent::__construct($name, $label, null, $id, $comment, $required, $size ?? 'col-12', $value);
+        parent::__construct($name, $label, null, $id, $comment, $required, $size ?? 'col-12', $value, $disabled);
     }
 }

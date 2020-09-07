@@ -8,6 +8,7 @@
             placeholder="{{ $placeholder }}"
             value="{{ old($name, $value) }}"
             class="form-control {{ ($errors->first($name) ? 'is-invalid' : '') }}"
+            {{$disabled}}
         >
         @include('BlueAdminComponents::formelements._errorandcomment')
     </div>

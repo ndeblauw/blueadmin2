@@ -15,6 +15,7 @@ class Checkboxes extends Component
         string $comment = null,
         string $id = null,
         bool $required = false,
+        bool $disabled = false,
         string $size = null,
         string $values = null,
         bool $inline = false,
@@ -22,7 +23,7 @@ class Checkboxes extends Component
         array $options = null,
         $source = null
     ) {
-        parent::__construct($name, $label, null, $id, $comment, $required, $size, null);
+        parent::__construct($name, $label, null, $id, $comment, $required, $size, null, $disabled);
 
         if($this->model !== null) {
             $this->values = $this->model->$name->pluck('id')->toArray();

@@ -3,7 +3,7 @@
 <div class="{{$size}}">
     <div class="form-group">
         <label for="{{$name}}">{!! $label !!} {!! $required !!}</label>
-        <select name="{{$name}}" id="{{$id}}" class="form-control {{($errors->first($name) ? 'is-invalid' : '')}}">
+        <select name="{{$name}}" id="{{$id}}" class="form-control {{($errors->first($name) ? 'is-invalid' : '')}}" {{$disabled}}>
             @if (empty($value))
                 <option value="" selected disabled>---Select---</option>
             @else

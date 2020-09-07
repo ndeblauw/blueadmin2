@@ -43,8 +43,8 @@ class BlueAdminController extends Controller
 
         switch ($mapper->count()) {
             case 0:
-                $model = $this->config->model;
                 return DataTables::eloquent($model)->toJson();
+
             case 1:
                 return DataTables::eloquent($model)
                     ->addColumn($mapper->get(0)->value, function ($item) use ($mapper) {

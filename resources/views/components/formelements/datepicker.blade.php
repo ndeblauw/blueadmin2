@@ -8,7 +8,9 @@
                 </span>
             </div>
             <input type="text" value="{{ old($name, $value) }}" name="{{$name}}"
-                   class="form-control float-right {{($errors->first($name) ? "is-invalid" : "")}}" id="{{$id}}">
+                   class="form-control float-right {{($errors->first($name) ? "is-invalid" : "")}}" id="{{$id}}"
+                   placeholder="{{$placeholder}}"
+            >
 
         </div>
         @include('BlueAdminComponents::formelements._errorandcomment')
@@ -23,6 +25,14 @@
 @push('blueadmin_scripts')
     <script src="{{ asset('lteadmin/js/tail.datetime-full.js') }}"></script>
     <script>
-        tail.DateTime("#{{$id}}");
+        tail.DateTime("#{{$id}}", {
+            weekStart: 1,
+            @if($onlyDate) timeFormat: false, @endif
+            @if($onlyTime)
+            dateFormat: false,
+            timeFormat: "HH:ii",
+            timeSeconds: 0,
+            @endif
+        });
     </script>
 @endpush

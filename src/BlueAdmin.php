@@ -9,7 +9,6 @@ class BlueAdmin {
 
     public static function routes()
     {
-
         Route::get('', '\Ndeblauw\BlueAdmin\BlueAdminController@dashboard')->name('blueadmin.dashboard');
 
         // Generic resourceful controller for catch all routes

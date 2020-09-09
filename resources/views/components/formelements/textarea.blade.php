@@ -4,9 +4,9 @@
         <textarea
             name="{{ $name }}"
             id="{{ $id }}"
-            rows="6"
+            rows="{{ $rows }}"
             placeholder="{{ $placeholder }}"
-            class="form-control form-control {{ ($errors->first($name) ? "is-invalid" : "") }}"
+            class="form-control form-control {{ $rte ? 'tinymce' : '' }} {{ ($errors->first($name) ? "is-invalid" : "") }}"
             {{$disabled}}
         >{{ old($name, $value) }}</textarea>
         @include('BlueAdminComponents::formelements._errorandcomment')
@@ -19,7 +19,7 @@
         <script>
             var editor_config = {
                 path_absolute: "{{ URL::to('/') }}/",
-                selector:'#{{ $id }}',
+                selector: '.tinymce',
                 menubar: false,
                 plugins: [
                     'advlist autolink lists link image charmap print preview anchor textcolor',

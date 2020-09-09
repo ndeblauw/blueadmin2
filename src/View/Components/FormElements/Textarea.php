@@ -6,6 +6,7 @@ class Textarea extends Component
 {
     const TEMPLATE = 'textarea';
     public bool $rte;
+    public int $rows;
 
     public function __construct(
         string $name,
@@ -17,10 +18,12 @@ class Textarea extends Component
         bool $disabled = false,
         string $size = null,
         string $value = null,
+        int $rows = 6,
         bool $rte = false
     ) {
         parent::__construct($name, $label, $placeholder, $id, $comment, $required, $size, $value, $disabled);
 
+        $this->rows = $rows;
         $this->rte = $rte;
     }
 }

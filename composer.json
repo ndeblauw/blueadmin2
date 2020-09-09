@@ -5,7 +5,7 @@
     "repositories":[
     {
         "type": "vcs",
-        "url" : "git@bitbucket.org:ndeblauw/blueadmin2.git"
+        "url" : "git@github.com:ndeblauw/blueadmin2.git"
     }
     ],
     "authors": [
@@ -18,7 +18,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.4",
-        "laravel/framework": "~7.0",
+        "laravel/framework": "^7.0|^8.0",
         "yajra/laravel-datatables-oracle": "~9.0",
         "iatstuti/laravel-cascade-soft-deletes": "^3.0",
         "spatie/laravel-medialibrary": "^8.0.0",

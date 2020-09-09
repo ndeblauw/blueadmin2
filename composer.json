@@ -19,10 +19,10 @@
     "require": {
         "php": "^7.4",
         "laravel/framework": "^7.0|^8.0",
-        "yajra/laravel-datatables-oracle": "~9.0",
-        "iatstuti/laravel-cascade-soft-deletes": "^3.0",
-        "spatie/laravel-medialibrary": "^8.0.0",
-        "spatie/laravel-permission": "^3.13"
+        "yajra/laravel-datatables-oracle": "^9.11.0",
+        "dyrynda/laravel-cascade-soft-deletes": "^4.0",
+        "spatie/laravel-medialibrary": "^8.7.0",
+        "spatie/laravel-permission": "^3.16.0"
     },
     "autoload": {
         "psr-4": {

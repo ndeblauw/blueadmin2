@@ -24,6 +24,7 @@ class BlueAdminController extends Controller
         $this->setConfig($modelname);
 
         return view('BlueAdminPages::index')
+                    ->with('icon', $this->config->icon )
         			->with('columns', $this->config->index_columns() )
                     ->with('initial_ordering', $this->config->index_initial_ordering() )
                     ->with('actions_col_nr', $this->config->index_actions_column_nr() )

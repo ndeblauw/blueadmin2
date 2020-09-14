@@ -40,7 +40,7 @@
                     @if( !array_key_exists('submenu', $item) )
                         <li class="nav-item">
                             <a href="{{$item['link'] ?? '#' }}" class="nav-link @if( array_key_exists('active', $item)) active @endif">
-                                <i class="nav-icon {{$item['icon'] ?? 'far fa-circle' }}"></i>
+                                <i class="nav-icon fa-fw {{$item['icon'] ?? 'far fa-circle' }}"></i>
                                 <p>
                                     {{$item['title'] ?? 'title missing' }}
                                     @if(array_key_exists('badge', $item))
@@ -56,7 +56,7 @@
                     @if( array_key_exists('submenu', $item))
                         <li class="nav-item has-treeview @if( array_key_exists('active', $item)) menu-open @endif">
                             <a href="#" class="nav-link @if( array_key_exists('active', $item)) active @endif">
-                                <i class="nav-icon {{$item['icon']}}"></i>
+                                <i class="nav-icon fa-fw {{$item['icon']}}"></i>
                                 <p>
                                     {{$item['title']}}
                                     <i class="right fas fa-angle-left"></i>
@@ -69,7 +69,7 @@
                                 @foreach($item['submenu'] as $subitem)
                                     <li class="nav-item">
                                         <a href="{{$subitem['link'] ?? '#'}}" class="nav-link @if( array_key_exists('active', $subitem)) active @endif">
-                                            <i class="nav-icon {{$subitem['icon'] ?? 'far fa-circle' }}"></i>
+                                            <i class="nav-icon fa-fw {{$subitem['icon'] ?? 'far fa-circle' }}"></i>
                                             <p>{{$subitem['title'] ?? 'title missing' }}</p>
                                         </a>
                                     </li>

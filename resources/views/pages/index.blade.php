@@ -2,7 +2,7 @@
 
 @section('main')
 
-<x-blueadmin-card :title="$title" col="col-12 col-md-7" noPadding="true">
+<x-blueadmin-card :title="$title" :icon="$icon" col="col-12 col-md-7" noPadding="true">
 
     <x-slot name="cardTools">
         @if( Session::get('blueadmin-'.$modelname . '-index-show-delete') )

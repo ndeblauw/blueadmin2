@@ -6,6 +6,8 @@ class BlueAdminModel {
 
 	public $nullable_fields = [];
 
+	public $icon = '';
+
 	public function index_columns()
 	{
         // If defined, use definition

@@ -1,5 +1,3 @@
-
-
 <div class="{{$size}}">
     <div class="form-group">
         <label for="{{$name}}">{!! $label !!} {!! $required !!}</label>

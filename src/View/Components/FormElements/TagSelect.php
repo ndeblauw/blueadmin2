@@ -18,13 +18,13 @@ class TagSelect extends Component
         bool $required = false,
         bool $disabled = false,
         string $size = null,
-        string $values = null,
+        $values = null,
 
         $options = null,
         $source = null
     ) {
         parent::__construct($name, $label, null, $id, $comment, $required, $size, null, $disabled);
-        $this->values = explode(',',$values);
+        $this->values = $values;
         $this->options = $options ?? $this->getOptionsFromSource($source);
     }
 }

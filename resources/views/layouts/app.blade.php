@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{asset('lteadmin/vendor/fontawesome/css/all.css')}}">
+    <script src="{{ config('blueadmin.fontawesomekit_url') }}" crossorigin="anonymous"></script>
     <!-- Fonts -->
     <link rel="stylesheet" href="{{asset('lteadmin/css/fonts.css')}}">
     <!-- Bootstrap 4 + Theme style -->

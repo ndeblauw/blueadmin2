@@ -20,5 +20,6 @@ return [
 
     'topbarmenu' => ['home' => '/', 'dashboard' => '/admin'],
 
+    'fontawesomekit_url' => 'https://kit.fontawesome.com/0bde3bbac3.js',
 
-    ];
+];

@@ -2,7 +2,7 @@
 
 @section('main')
 
-<x-blueadmin-card :title="$title" :icon="$icon" col="col-12 col-md-7" noPadding="true">
+<x-blueadmin-card :title="$title" :icon="$icon" col="col-12 col-md-12 col-lg-11" noPadding>
 
     <x-slot name="cardTools">
         @if( Session::get('blueadmin-'.$modelname . '-index-show-delete') )
@@ -25,7 +25,7 @@
     </x-slot>
 
     <div class="table-responsive">
-        <table class="table table-sm table-striped table-hover table-head-fixed" id="{{$modelname}}-table">
+        <table class="table table-sm table-striped table-hover table-head-fixed" id="{{$modelname}}-table" width="99%">
             <thead>
             <tr>
                 @foreach($columns as $column)

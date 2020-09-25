@@ -18,6 +18,7 @@
         <script src="/lteadmin/vendor/tinymce/tinymce.min.js"></script>
         <script>
             var editor_config = {
+                relative_urls : false,
                 path_absolute: "{{ URL::to('/') }}/",
                 selector: '.tinymce',
                 menubar: false,

@@ -11,8 +11,9 @@ class Card extends Component
     public $headerTitle;
     public $cardTools;
     public $noPadding;
+    public $noHeader;
 
-    public function __construct($title = '', $col = null, $icon = null, $cardTools = null, $noPadding = false)
+    public function __construct($title = '', $col = null, $icon = null, $cardTools = null, $noPadding = false, $noHeader = false)
     {
         $this->col = $col ?? 'col-12 col-md-6';
         $this->headerIcon = $icon;

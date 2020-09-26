@@ -15,7 +15,7 @@ class BlueAdminServiceProvider extends ServiceProvider
         $this->mergeConfigFrom( $this->getConfigFile(), 'blueadmin' );
 
         // For data binding
-        $this->app->singleton(FormDataBinder::class, fn () => new FormDataBinder);
+        $this->app->singleton(FormDataBinder::class, fn() => new FormDataBinder);
 
         // Building blocks for the lay-out
         $this->loadViewsFrom(__DIR__.'/../resources/views/components/template', 'BlueAdminTemplate');

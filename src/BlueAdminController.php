@@ -18,7 +18,6 @@ class BlueAdminController extends Controller
         return view()->first(['admin.dashboard','BlueAdminPages::dashboard']);
     }
 
-
     public function index($modelname)
     {
         $this->setConfig($modelname);
@@ -31,8 +30,6 @@ class BlueAdminController extends Controller
         			->with('title', ucfirst($modelname))
         			->with('modelname', $modelname);
                     // for now without widgets->with('widgets', $this->config->widgets() ?? []);
-
-
     }
 
     public function api_index($modelname)
@@ -72,7 +69,8 @@ class BlueAdminController extends Controller
         $this->setReturnPathSessionVariable();
 
         if ($this->dealWithPrefillInputs($request)) {
-            return redirect()->route('blueadmin.create', ['modelname' => $modelname]);
+            $parameters = $this->extractNonPrefillParameters($request);
+            return redirect()->route('blueadmin.create', array_merge(['modelname' => $modelname], $parameters));
         }
 
         return view('BlueAdminPages::create')
@@ -213,9 +211,11 @@ class BlueAdminController extends Controller
 
     private function setReturnPathSessionVariable($id = null)
     {
-        if ( $id === null && route('blueadmin.create', $this->modelname) === url()->previous())
+        $previousUrl = substr(url()->previous(),0, strpos(url()->previous(),'?')); // remove parameters
+
+        if ( $id === null && route('blueadmin.create', $this->modelname) === $previousUrl)
             return;
-        if ( $id !== null && route('blueadmin.edit', ['modelname' => $this->modelname, 'id' => $id]) === url()->previous() )
+        if ( $id !== null && route('blueadmin.edit', ['modelname' => $this->modelname, 'id' => $id]) === $previousUrl )
             return;
 
         Session::put('blueadmin.returnpath', str_replace(url('/'), '', url()->previous()));
@@ -229,5 +229,12 @@ class BlueAdminController extends Controller
 
         Session::flash('prefill', $request->prefill);
         return true;
+    }
+
+    private function extractNonPrefillParameters($request):array
+    {
+        $parameters = $request->all();
+        unset($parameters['prefill']);
+        return $parameters;
     }
 }

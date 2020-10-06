@@ -4,7 +4,6 @@ namespace Ndeblauw\BlueAdmin;
 
 use Auth;
 use Session;
-use App\User;
 use App\Http\Controllers\Controller;
 
 class UserLoginAsController extends Controller
@@ -12,7 +11,11 @@ class UserLoginAsController extends Controller
     public function loginAs(User $user)
     {
         $current_user_id = Auth::id();
-        Auth::login($user);
+        if( (int) app()->version() < 8 ) {
+            $user = \App\User::findOrFail($user);
+        } else {
+            $user = \App\Models\User::findOrFail($user);
+        }
 
         Session::put('loginas', $current_user_id);
         return redirect()->route('home');
@@ -21,7 +24,11 @@ class UserLoginAsController extends Controller
     public function stopLoginAs()
     {
         $id = Session::get('loginas');
-        $user = User::find($id);
+        if( (int) app()->version() < 8 ) {
+            $user = \App\User::findOrFail($id);
+        } else {
+            $user = \App\Models\User::findOrFail($id);
+        }
         Auth::login($user);
 
         Session::forget('loginas');

@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 class UserLoginAsController extends Controller
 {
-    public function loginAs(User $user)
+    public function loginAs($user)
     {
         $current_user_id = Auth::id();
         if( (int) app()->version() < 8 ) {

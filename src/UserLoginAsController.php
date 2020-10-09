@@ -16,6 +16,7 @@ class UserLoginAsController extends Controller
         } else {
             $user = \App\Models\User::findOrFail($user);
         }
+        Auth::login($user);
 
         Session::put('loginas', $current_user_id);
         return redirect()->route('home');

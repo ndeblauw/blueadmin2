@@ -58,6 +58,7 @@ class BlueAdminServiceProvider extends ServiceProvider
         Blade::component('ba-datepicker', View\Components\FormElements\Datepicker::class);
         Blade::component('ba-mediafile', View\Components\FormElements\MediaFile::class);
         Blade::component('ba-tagselect', View\Components\FormElements\TagSelect::class);
+        Blade::component('ba-searchbox', View\Components\FormElements\Searchbox::class);
 
         Blade::component('ba-belongsto', View\Components\FormElements\BelongsTo::class);
 

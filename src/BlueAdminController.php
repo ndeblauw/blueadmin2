@@ -37,7 +37,12 @@ class BlueAdminController extends Controller
         $this->setConfig($modelname);
 
         $mapper = $this->config->index_columns()->where('type', 'belongsto')->values();
+
         $model = $this->config->model::with($mapper->pluck('value')->toArray())->select($modelname.'.*');
+
+        foreach($this->config->index_scopes as $scope) {
+            $model = $model->{$scope}();
+        }
 
         $datatablesObject = DataTables::eloquent($model);
 

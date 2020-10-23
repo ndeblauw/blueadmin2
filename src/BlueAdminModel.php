@@ -5,6 +5,7 @@ namespace Ndeblauw\BlueAdmin;
 class BlueAdminModel {
 
 	public $nullable_fields = [];
+	public $index_scopes = [];
 
 	public $icon = '';
 

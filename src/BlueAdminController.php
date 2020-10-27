@@ -36,21 +36,27 @@ class BlueAdminController extends Controller
     {
         $this->setConfig($modelname);
 
-        $mapper = $this->config->index_columns()->where('type', 'belongsto')->values();
+        $mapperBelongsTo = $this->config->index_columns()->where('type', 'belongsto')->values();
+        $mapperBelongsToMany = $this->config->index_columns()->where('type', 'belongsToMany')->values();
 
-        $model = $this->config->model::with($mapper->pluck('value')->toArray())->select($modelname.'.*');
-
-        foreach($this->config->index_scopes as $scope) {
-            $model = $model->{$scope}();
-        }
+        $preloadRelations = array_merge($mapperBelongsTo->pluck('value')->toArray(), $mapperBelongsToMany->pluck('value')->toArray());
+        $model = $this->config->model::with($preloadRelations)->select($modelname.'.*');
 
         $datatablesObject = DataTables::eloquent($model);
 
-        foreach($mapper as $map) {
-            $dataTablesObject = $datatablesObject->addColumn($map->value, function ($item) use ($map) {
+        foreach($mapperBelongsTo as $map) {
+            $datatablesObject->addColumn($map->value, function ($item) use ($map) {
                 $key = $map->value;
                 $field = $map->field;
                 return $item->$key->$field;
+            });
+        }
+
+        foreach($mapperBelongsToMany as $map) {
+            $datatablesObject->addColumn($map->value, function ($item) use ($map) {
+                $key = $map->value;
+                $field = $map->field;
+                return $item->$key->pluck($field)->implode(', ');
             });
         }
 
@@ -92,6 +98,12 @@ class BlueAdminController extends Controller
         // Make sure that boolean stuff is treated as boolean
         foreach (collect($this->config->fields)->where('type','boolean')->keys() as $key) {
             $valid[$key] = array_key_exists($key, $valid) ? true : false;
+        }
+
+        // Make sure that belongsToMany stuff is treated correctly
+        foreach (collect($this->config->fields)->where('type','belongsToMany')->keys() as $key) {
+            $model->$key()->sync($valid[$key]);
+            unset($valid[$key]);
         }
 
         // Taking care of mediafiles - part 1
@@ -138,6 +150,12 @@ class BlueAdminController extends Controller
         // Make sure that boolean stuff is treated as boolean
         foreach (collect($this->config->fields)->where('type','boolean')->keys() as $key) {
             $valid[$key] = array_key_exists($key, $valid) ? true : false;
+        }
+
+        // Make sure that belongsToMany stuff is treated correctly
+        foreach (collect($this->config->fields)->where('type','belongsToMany')->keys() as $key) {
+            $model->$key()->sync($valid[$key]);
+            unset($valid[$key]);
         }
 
         // Taking care of mediafiles

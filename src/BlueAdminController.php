@@ -128,8 +128,17 @@ class BlueAdminController extends Controller
             }
         }
 
-        $returnPath = Session::get('blueadmin.returnpath', route('blueadmin.index', $modelname) );
-        return redirect($returnPath);
+        switch($this->config->afterCreate()) {
+            case 'back':
+                $returnPath = Session::get('blueadmin.returnpath', route('blueadmin.index', ['modelname' => $modelname]) );
+                return redirect($returnPath);
+
+            case 'index':
+                return redirect()->route('blueadmin.index', ['modelname' => $modelname]);
+
+            case 'show':
+                return redirect()->route('blueadmin.show', ['modelname' => $modelname, 'id' => $model->id]);
+        }
 	}
 
 
@@ -184,8 +193,17 @@ class BlueAdminController extends Controller
 
         $model->update($valid);
 
-        $returnPath = Session::get('blueadmin.returnpath', route('blueadmin.index', $modelname) );
-        return redirect($returnPath);
+        switch($this->config->afterEdit()) {
+            case 'back':
+                $returnPath = Session::get('blueadmin.returnpath', route('blueadmin.index', ['modelname' => $modelname]) );
+                return redirect($returnPath);
+
+            case 'index':
+                return redirect()->route('blueadmin.index', ['modelname' => $modelname]);
+
+            case 'show':
+                return redirect()->route('blueadmin.show', ['modelname' => $modelname, 'id' => $model->id]);
+        }
     }
 
 

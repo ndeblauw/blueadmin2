@@ -111,4 +111,14 @@ class BlueAdminModel {
 		return $this->to_media_file;
 	}
 
+    public function afterCreate()
+    {
+        return $this->return_after_create ?? 'back';
+    }
+
+    public function afterEdit()
+    {
+        return $this->return_after_edit ?? 'back';
+    }
+
 }

@@ -27,7 +27,7 @@
                     'searchreplace visualblocks fullscreen',
                     'contextmenu paste help wordcount code'
                 ],
-                toolbar: ' undo redo |  bold italic | link | alignleft aligncenter alignright alignjustify | outdent indent | removeformat | code | help',
+                toolbar: ' undo redo |  bold italic | link | alignleft aligncenter alignright alignjustify | numlist bullist | outdent indent | removeformat | code | help',
             }
             tinymce.init(editor_config);
         </script>

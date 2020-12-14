@@ -103,8 +103,10 @@ class BlueAdminController extends Controller
         // Make sure that belongsToMany stuff is treated correctly - part 1
         $belongsToMany = [];
         foreach (collect($this->config->fields)->where('type','belongsToMany')->keys() as $key) {
-            $belongsToMany[$key] = $valid[$key];
-            unset($valid[$key]);
+            if (array_key_exists($key, $valid)) {
+                $belongsToMany[$key] = $valid[$key];
+                unset($valid[$key]);
+            }
         }
 
         // Taking care of mediafiles - part 1
@@ -169,8 +171,12 @@ class BlueAdminController extends Controller
 
         // Make sure that belongsToMany stuff is treated correctly
         foreach (collect($this->config->fields)->where('type','belongsToMany')->keys() as $key) {
-            $model->$key()->sync($valid[$key]);
-            unset($valid[$key]);
+            if (array_key_exists($key, $valid)) {
+                $model->$key()->sync($valid[$key]);
+                unset($valid[$key]);
+            } else {
+                $model->$key()->sync([]);
+            }
         }
 
         // Taking care of mediafiles

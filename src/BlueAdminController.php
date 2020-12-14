@@ -116,6 +116,13 @@ class BlueAdminController extends Controller
             }
         }
 
+        // Taking care of files - part 1
+        foreach (collect($this->config->fields)->where('type','file')->keys() as $file) {
+            if($request->has($file)) {
+                unset($valid[$file]);
+            }
+        }
+
         $model = $this->config->model::create($valid);
 
         // Make sure that belongsToMany stuff is treated correctly - part 2
@@ -127,6 +134,19 @@ class BlueAdminController extends Controller
         foreach (collect($this->config->fields)->where('type','mediafile')->keys() as $file) {
             if($request->has($file)) {
                 $model->addMediaFromRequest($file)->toMediaCollection($file);
+            }
+        }
+
+        // Taking care of file uploads - part 2
+        foreach (collect($this->config->fields)->where('type','file')->keys() as $file) {
+            if($request->has($file)) {
+                $f_orig = $this->config->fields[$file]['filename_original'];
+                $f_disk = $this->config->fields[$file]['disk'];
+                $f = $request->file($file);
+                $model->$f_orig = $f->getClientOriginalName();
+                $path = $f->store(null,$f_disk);
+                $model->$file = $path;
+                $model->save();
             }
         }
 
@@ -184,6 +204,20 @@ class BlueAdminController extends Controller
             if($request->has($file)) {
                 optional($model->getFirstMedia($file))->delete();
                 $model->addMediaFromRequest($file)->toMediaCollection($file);
+                unset($valid[$file]);
+            }
+        }
+
+        // Taking care of file uploads
+        foreach (collect($this->config->fields)->where('type','file')->keys() as $file) {
+            if($request->has($file)) {
+                $f_orig = $this->config->fields[$file]['filename_original'];
+                $f_disk = $this->config->fields[$file]['disk'];
+                $f = $request->file($file);
+                $model->$f_orig = $f->getClientOriginalName();
+                $path = $f->store(null,$f_disk);
+                $model->$file = $path;
+                $model->save();
                 unset($valid[$file]);
             }
         }

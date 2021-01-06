@@ -102,7 +102,6 @@ class BlueAdminModel {
 		return array_map(function($val) { return 'App\BlueAdmin\Widgets\\' . $val;} , $this->widgets);
 	}
 
-
 	public function mediafiles()
 	{
 		if(!isset($this->to_media_file))
@@ -119,6 +118,21 @@ class BlueAdminModel {
     public function afterEdit()
     {
         return $this->return_after_edit ?? 'back';
+    }
+
+    public function parsed_validation($model)
+    {
+        $validationRules = $this->validation();
+
+        foreach($validationRules as $key => $rules) {
+            foreach($rules as $field => $rule) {
+                if(strpos($rule, '###OWNID###')) {
+                    $validationRules[$key][$field] = str_replace('###OWNID###', $model->id, $rule);
+                }
+            }
+        }
+
+        return $validationRules;
     }
 
 }

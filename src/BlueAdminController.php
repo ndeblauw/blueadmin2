@@ -182,7 +182,7 @@ class BlueAdminController extends Controller
     	$this->setConfig($modelname);
         $model = $this->getModel($id);
 
-        $valid = $request->validate( $this->config->validation() );
+        $valid = $request->validate( $this->config->parsed_validation($model) );
 
         // Make sure that boolean stuff is treated as boolean
         foreach (collect($this->config->fields)->where('type','boolean')->keys() as $key) {

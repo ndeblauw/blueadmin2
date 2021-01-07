@@ -298,7 +298,12 @@ class BlueAdminController extends Controller
 
     private function setReturnPathSessionVariable($id = null)
     {
-        $previousUrl = substr(url()->previous(),0, strpos(url()->previous(),'?')); // remove parameters
+        // remove get parameters, if any
+        $previousUrl = substr(
+            url()->previous(),
+            0,
+            strpos(url()->previous(),'?') ?: strlen(url()->previous())
+        );
 
         if ( $id === null && route('blueadmin.create', $this->modelname) === $previousUrl)
             return;

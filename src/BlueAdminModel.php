@@ -120,7 +120,7 @@ class BlueAdminModel {
         return $this->return_after_edit ?? 'back';
     }
 
-    public function parsed_validation($model)
+    public function parsed_validation($model = null)
     {
         $validationRules = $this->validation();
 

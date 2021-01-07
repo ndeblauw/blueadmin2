@@ -93,7 +93,7 @@ class BlueAdminController extends Controller
 	{
         $this->setConfig($modelname);
 
-        $valid = $request->validate( $this->config->validation() );
+        $valid = $request->validate( $this->config->parsed_validation() );
 
         // Make sure that boolean stuff is treated as boolean
         foreach (collect($this->config->fields)->where('type','boolean')->keys() as $key) {

@@ -124,10 +124,13 @@ class BlueAdminModel {
     {
         $validationRules = $this->validation();
 
+        // Remove ###OWNID### for store, replace by id for update
+        $replace_item = ($model === null) ? ['src' => ',###OWNID###', 'dest' => ''] : ['src' => '###OWNID###', 'dest' => $model->id];
+
         foreach($validationRules as $key => $rules) {
             foreach($rules as $field => $rule) {
-                if(strpos($rule, '###OWNID###')) {
-                    $validationRules[$key][$field] = str_replace('###OWNID###', $model->id, $rule);
+                if(strpos($rule, $replace_item['src'])) {
+                    $validationRules[$key][$field] = str_replace($replace_item['src'], $replace_item['dest'], $rule);
                 }
             }
         }

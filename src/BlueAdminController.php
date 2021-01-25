@@ -257,6 +257,21 @@ class BlueAdminController extends Controller
         return redirect($returnPath);
     }
 
+    public function toggleStatesave($modelname, Request $request)
+    {
+        $key = 'blueadmin-'.$modelname . '-index-statesave';
+
+        if ($request->session()->has($key)) {
+            $request->session()->forget($key);
+        } else {
+            $request->session()->put($key, true);
+        }
+
+        return redirect()->back();
+    }
+
+
+
     public function toggleShowDelete($modelname, Request $request)
     {
         $key = 'blueadmin-'.$modelname . '-index-show-delete';

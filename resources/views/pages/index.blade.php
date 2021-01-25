@@ -5,7 +5,14 @@
 <x-blueadmin-card :title="$title" :icon="$icon" col="col-12 col-md-12 col-lg-11" noPadding>
 
     <x-slot name="cardTools">
-        @if( Session::get('blueadmin-'.$modelname . '-index-show-delete') )
+        @if( Session::get('blueadmin-'.$modelname . '-index-statesave') )
+            <a href="{{route('blueadmin.index.toggle-statesave', ['modelname' => $modelname])}}" class="btn btn-xs text-success"><i class="fas fa-toggle-on"></i>&nbsp;STATE SAVE</a>
+        @else
+            <a href="{{route('blueadmin.index.toggle-statesave', ['modelname' => $modelname])}}" class="btn btn-xs text-muted"><i class="fas fa-toggle-off"></i>&nbsp;STATE SAVE</a>
+        @endif
+
+
+    @if( Session::get('blueadmin-'.$modelname . '-index-show-delete') )
             <a href="{{route('blueadmin.index.toggle-show-delete', ['modelname' => $modelname])}}" class="btn btn-xs text-success"><i class="fas fa-toggle-on"></i>&nbsp;SHOW DELETE</a>
         @else
             <a href="{{route('blueadmin.index.toggle-show-delete', ['modelname' => $modelname])}}" class="btn btn-xs text-muted"><i class="fas fa-toggle-off"></i>&nbsp;SHOW DELETE</a>
@@ -13,7 +20,7 @@
 
         @if( Session::get('blueadmin-'.$modelname . '-open-new-window') )
             <a href="{{route('blueadmin.index.toggle-open-new-window', ['modelname' => $modelname])}}" class="btn btn-xs text-success"><i class="fas fa-toggle-on"></i>&nbsp;OPEN ACTIONS IN NEW WINDOW</a>&nbsp;&nbsp;&nbsp;
-            @php $target = ' target="_blank" '; @endphp
+            @php $target = ' target=_blank '; @endphp
         @else
             <a href="{{route('blueadmin.index.toggle-open-new-window', ['modelname' => $modelname])}}" class="btn btn-xs text-muted"><i class="fas fa-toggle-off"></i>&nbsp;OPEN ACTIONS IN NEW WINDOW</a>&nbsp;&nbsp;&nbsp;
             @php $target = ' '; @endphp
@@ -90,6 +97,9 @@
 
 $(function() {
     $('#{{$modelname}}-table').DataTable({
+        @if( Session::has('blueadmin-'.$modelname . '-index-statesave') )
+            stateSave: true,
+        @endif
         processing: true,
         serverSide: true,
         ajax: '{!! route('blueadmin.api.index', $modelname) !!}',

@@ -26,6 +26,7 @@ class BlueAdmin {
             Route::get('api/v1/{modelname}', '\Ndeblauw\BlueAdmin\BlueAdminController@api_index')->name('blueadmin.api.index');
 
             // Auxiliary routes for blueadmin functionality
+            Route::get('blueadmin/toggle-statesave/{modelname}/', '\Ndeblauw\BlueAdmin\BlueAdminController@toggleStateSave')->name('blueadmin.index.toggle-statesave');
             Route::get('blueadmin/toggle-show-delete/{modelname}/', '\Ndeblauw\BlueAdmin\BlueAdminController@toggleShowDelete')->name('blueadmin.index.toggle-show-delete');
             Route::get('blueadmin/toggle-open-new-window/{modelname}', '\Ndeblauw\BlueAdmin\BlueAdminController@toggleOpenNewWindow')->name('blueadmin.index.toggle-open-new-window');
         } else {
@@ -45,6 +46,7 @@ class BlueAdmin {
             Route::get('api/v1/{modelname}', [BlueAdminController::class, 'api_index'])->name('blueadmin.api.index');
 
             // Auxiliary routes for blueadmin functionality
+            Route::get('blueadmin/toggle-statesave/{modelname}/', [BlueAdminController::class, 'toggleStateSave'])->name('blueadmin.index.toggle-statesave');
             Route::get('blueadmin/toggle-show-delete/{modelname}/', [BlueAdminController::class, 'toggleShowDelete'])->name('blueadmin.index.toggle-show-delete');
             Route::get('blueadmin/toggle-open-new-window/{modelname}', [BlueAdminController::class, 'toggleOpenNewWindow'])->name('blueadmin.index.toggle-open-new-window');
         }

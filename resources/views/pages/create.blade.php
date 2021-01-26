@@ -25,3 +25,9 @@
     </form>
 
 @endsection
+
+@if(View::exists('admin.'.$modelname.'._aside-form'))
+@section('aside')
+    @include('admin.'.$modelname.'._aside-form')
+@endsection
+@endif

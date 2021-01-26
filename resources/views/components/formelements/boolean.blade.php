@@ -5,7 +5,7 @@
             <label class="form-check-label">
                 <input type="hidden" name="{{$name}}" value="0">
                 <input type="checkbox" class="form-check-input" id="{{$id}}" name="{{$name}}" value="1"
-                       @if(old($name,$value))) checked @endif >
+                       @if(old($name,$value)) checked @endif >
                 {{$legend}}
             </label>
         </div>

@@ -48,6 +48,14 @@
 
 @endsection
 
+
+@if(View::exists('admin.'.$modelname.'._aside-form'))
+@section('aside')
+    @include('admin.'.$modelname.'._aside-index')
+@endsection
+@endif
+
+
 @push('blueadmin_header')
     <!-- DataTables stuff -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">

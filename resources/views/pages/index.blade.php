@@ -49,7 +49,7 @@
 @endsection
 
 
-@if(View::exists('admin.'.$modelname.'._aside-form'))
+@if(View::exists('admin.'.$modelname.'._aside-index'))
 @section('aside')
     @include('admin.'.$modelname.'._aside-index')
 @endsection

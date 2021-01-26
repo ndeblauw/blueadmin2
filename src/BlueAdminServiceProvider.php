@@ -52,6 +52,7 @@ class BlueAdminServiceProvider extends ServiceProvider
         Blade::component('ba-text', View\Components\FormElements\Textfield::class);
         Blade::component('ba-textarea', View\Components\FormElements\Textarea::class);
         Blade::component('ba-select', View\Components\FormElements\Select::class);
+        Blade::component('ba-select2', View\Components\FormElements\Select2::class);
         Blade::component('ba-radiobuttons', View\Components\FormElements\Radiobuttons::class);
         Blade::component('ba-checkboxes', View\Components\FormElements\Checkboxes::class);
         Blade::component('ba-boolean', View\Components\FormElements\Boolean::class);

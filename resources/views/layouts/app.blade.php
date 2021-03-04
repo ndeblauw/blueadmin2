@@ -80,4 +80,5 @@
 @include('BlueAdminLayouts::partials.includes.toastr')
 @stack('blueadmin_scripts')
 
+</body>
 </html>

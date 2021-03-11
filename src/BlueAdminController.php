@@ -97,7 +97,7 @@ class BlueAdminController extends Controller
 
         // Make sure that boolean stuff is treated as boolean
         foreach (collect($this->config->fields)->where('type','boolean')->keys() as $key) {
-            $valid[$key] = array_key_exists($key, $valid) ? true : false;
+            $valid[$key] = array_key_exists($key, $valid) ? [false, true][$valid[$key]] : false;
         }
 
         // Make sure that belongsToMany stuff is treated correctly - part 1

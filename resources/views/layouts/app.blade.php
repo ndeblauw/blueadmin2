@@ -22,7 +22,7 @@
     @stack('blueadmin_header')
 </head>
 
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini"  @if(config('blueadmin.test', false))style="border: 4px red solid;" @endif>
 <div class="wrapper">
     <!-- navs -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">

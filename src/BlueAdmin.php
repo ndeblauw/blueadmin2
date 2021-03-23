@@ -2,7 +2,6 @@
 
 namespace Ndeblauw\BlueAdmin;
 
-
 use Illuminate\Support\Facades\Route;
 
 class BlueAdmin {
@@ -11,6 +10,12 @@ class BlueAdmin {
     {
         if( (int) app()->version() < 8 ) {
             Route::get('', '\Ndeblauw\BlueAdmin\BlueAdminController@dashboard')->name('blueadmin.dashboard');
+
+            // Filepond routes
+            Route::prefix('filepond')->group(function () {
+                Route::post('/', '\Ndeblauw\BlueAdmin\FilepondController@upload')->name('filepond.upload');
+                Route::delete('/', '\Ndeblauw\BlueAdmin\FilepondController@delete')->name('filepond.delete');
+            });
 
             // Generic resourceful controller for catch all routes
             Route::get('{modelname}', '\Ndeblauw\BlueAdmin\BlueAdminController@index')->name('blueadmin.index');
@@ -31,6 +36,12 @@ class BlueAdmin {
             Route::get('blueadmin/toggle-open-new-window/{modelname}', '\Ndeblauw\BlueAdmin\BlueAdminController@toggleOpenNewWindow')->name('blueadmin.index.toggle-open-new-window');
         } else {
             Route::get('', [BlueAdminController::class, 'dashboard'])->name('blueadmin.dashboard');
+
+            // Filepond routes
+            Route::prefix('filepond')->group(function () {
+                Route::post('/', [FilepondController::class, 'upload'])->name('filepond.upload');
+                Route::delete('/', [FilepondController::class, 'delete'])->name('filepond.delete');
+            });
 
             // Generic resourceful controller for catch all routes
             Route::get('{modelname}', [BlueAdminController::class, 'index'])->name('blueadmin.index');

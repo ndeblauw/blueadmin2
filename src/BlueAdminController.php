@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Session;
 class BlueAdminController extends Controller
 {
     protected $config;
+    private $filepond;
+
+    public function __construct(Filepond $filepond)
+    {
+        $this->filepond = $filepond;
+    }
 
     public function dashboard()
     {
@@ -107,6 +113,18 @@ class BlueAdminController extends Controller
                 $belongsToMany[$key] = $valid[$key];
                 unset($valid[$key]);
             }
+        }
+
+        // Taking care of mediafiles through filepond
+        foreach (collect($this->config->fields)->where('type','filepond')->keys() as $key)
+        {
+            $data = is_array($valid[$key]) ? $valid[$key] : [$valid[$key]];
+            foreach($data as $item) {
+                ray($item);
+                ray($this->filepond->getPathFromServerId($item));
+            }
+
+            dd('stop');
         }
 
         // Taking care of mediafiles - part 1

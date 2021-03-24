@@ -30,7 +30,7 @@ class Filepond
 
     public function getBasePath()
     {
-        return Storage::disk(config('filepond.temporary_files_disk', 'local'))
-            ->path(config('filepond.temporary_files_path', 'filepond'));
+        return Storage::disk(config('blueadmin.filepond_temporary_files_disk', 'local'))
+            ->path(config('blueadmin.filepond_temporary_files_path', 'filepond'));
     }
 }

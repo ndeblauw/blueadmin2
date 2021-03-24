@@ -29,13 +29,13 @@ class BlueAdminController extends Controller
         $this->setConfig($modelname);
 
         return view('BlueAdminPages::index')
-                    ->with('icon', $this->config->icon )
-        			->with('columns', $this->config->index_columns() )
-                    ->with('initial_ordering', $this->config->index_initial_ordering() )
-                    ->with('actions_col_nr', $this->config->index_actions_column_nr() )
-        			->with('title', ucfirst($modelname))
-        			->with('modelname', $modelname);
-                    // for now without widgets->with('widgets', $this->config->widgets() ?? []);
+            ->with('icon', $this->config->icon )
+            ->with('columns', $this->config->index_columns() )
+            ->with('initial_ordering', $this->config->index_initial_ordering() )
+            ->with('actions_col_nr', $this->config->index_actions_column_nr() )
+            ->with('title', ucfirst($modelname))
+            ->with('modelname', $modelname);
+        // for now without widgets->with('widgets', $this->config->widgets() ?? []);
     }
 
     public function api_index($modelname)
@@ -75,13 +75,13 @@ class BlueAdminController extends Controller
         $model = $this->getModel($id);
 
         return view('admin.' . $modelname .'.show')
-                    ->with('m', $model)
-                    ->with('title', ucfirst(Str::singular($modelname)))
-                    ->with('modelname', $modelname);
+            ->with('m', $model)
+            ->with('title', ucfirst(Str::singular($modelname)))
+            ->with('modelname', $modelname);
     }
 
     public function create(Request $request, $modelname)
-	{
+    {
         $this->setConfig($modelname);
         $this->setReturnPathSessionVariable();
 
@@ -91,12 +91,12 @@ class BlueAdminController extends Controller
         }
 
         return view('BlueAdminPages::create')
-        			->with('title', ucfirst(Str::singular($modelname)))
-        			->with('modelname', $modelname);
-	}
+            ->with('title', ucfirst(Str::singular($modelname)))
+            ->with('modelname', $modelname);
+    }
 
-	public function store(Request $request, $modelname)
-	{
+    public function store(Request $request, $modelname)
+    {
         $this->setConfig($modelname);
 
         $valid = $request->validate( $this->config->parsed_validation() );
@@ -115,16 +115,14 @@ class BlueAdminController extends Controller
             }
         }
 
-        // Taking care of mediafiles through filepond
-        foreach (collect($this->config->fields)->where('type','filepond')->keys() as $key)
-        {
-            $data = is_array($valid[$key]) ? $valid[$key] : [$valid[$key]];
-            foreach($data as $item) {
-                ray($item);
-                ray($this->filepond->getPathFromServerId($item));
+        // Taking care of mediafiles through filepond - part 1
+        $filepond = [];
+        foreach (collect($this->config->fields)->where('type','filepond')->keys() as $key) {
+            if(array_key_exists($key, $valid)) {
+                $data = is_array($valid[$key]) ? $valid[$key] : [$valid[$key]];
+                $filepond[$key] = $data;
+                unset($valid[$key]);
             }
-
-            dd('stop');
         }
 
         // Taking care of mediafiles - part 1
@@ -148,10 +146,17 @@ class BlueAdminController extends Controller
             $model->$key()->sync($value);
         }
 
+        // Taking care of mediafiles through filepond - part 2
+        foreach($filepond as $key => $data) {
+            foreach($data as $item) {
+                $model->addMedia($this->filepond->getPathFromServerId($item))->toMediaCollection($key);
+            }
+        }
+
         // Taking care of mediafiles - part 2
         foreach (collect($this->config->fields)->where('type','mediafile')->keys() as $file) {
             if($request->has($file)) {
-                $model->addMediaFromRequest($file)->toMediaCollection($file);
+                $model->addMediaFromRequest($file)->preservingOriginal()->toMediaCollection($file);
             }
         }
 
@@ -179,7 +184,7 @@ class BlueAdminController extends Controller
             case 'show':
                 return redirect()->route('blueadmin.show', ['modelname' => $modelname, 'id' => $model->id]);
         }
-	}
+    }
 
 
     public function edit($modelname, $id)
@@ -190,14 +195,14 @@ class BlueAdminController extends Controller
         $model = $this->getModel($id);
 
         return view('BlueAdminPages::edit')
-        			->with('m', $model)
-        			->with('title', ucfirst(Str::singular($modelname)))
-        			->with('modelname', $modelname);
+            ->with('m', $model)
+            ->with('title', ucfirst(Str::singular($modelname)))
+            ->with('modelname', $modelname);
     }
 
     public function update(Request $request, $modelname, $id)
     {
-    	$this->setConfig($modelname);
+        $this->setConfig($modelname);
         $model = $this->getModel($id);
 
         $valid = $request->validate( $this->config->parsed_validation($model) );
@@ -216,6 +221,42 @@ class BlueAdminController extends Controller
                 $model->$key()->sync([]);
             }
         }
+
+        // Taking care of mediafiles through filepond
+        foreach (collect($this->config->fields)->where('type','filepond')->keys() as $key) {
+            if(array_key_exists($key, $valid)) {
+                $data = is_array($valid[$key]) ? $valid[$key] : [$valid[$key]];
+
+                $listExistingFiles = $model->getMedia($key)->pluck('id')->toArray();
+                $toKeep = []; $newOrder = [];
+
+                // Process the info in the request, one item at a time
+                foreach($data as $item) {
+
+                    if(substr($item,0,14) === 'existing_file_') {
+                        // Was it an already existing file? Add it to keep list
+                        $toKeep[] = substr($item,14 );
+                        $newOrder[] = substr($item,14 );
+                    } else {
+                        // Is it a new file upload? Add it to the collection
+                        $newMediaFile = $model->addMedia($this->filepond->getPathFromServerId($item))->preservingOriginal()->toMediaCollection($key);
+                        $newOrder[] = $newMediaFile->id;
+                    }
+                }
+
+                // Remove (existing files) that were deleted
+                foreach(array_diff($listExistingFiles, $toKeep) as $idToDetach){
+                    $model->getMedia($key)->where('id',$idToDetach)->first()->delete();
+                }
+
+                // And respect the given order
+                \Spatie\MediaLibrary\MediaCollections\Models\Media::setNewOrder($newOrder);
+
+                unset($valid[$key]);
+            }
+        }
+
+
 
         // Taking care of mediafiles
         foreach (collect($this->config->fields)->where('type','mediafile')->keys() as $file) {

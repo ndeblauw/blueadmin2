@@ -1,25 +1,17 @@
 <div class="{{ $size }}">
     <div class="form-group">
         <label for="{{ $name }}">{!! $label !!}&nbsp;{!! $required  !!}</label>
-
-        @if( isset($model) && ($model->$name !== null) )
-            <div class="row">
-                <div class="col-4">
-                    <a href="">{{ $model->filename_original }}</a>
-                </div>
-                <div class="col-8">
-                    <span class="text-muted">Uploading a new {{$name}} will automatically remove this file.</span>
-                </div>
-            </div>
-        @endif
+        Upload {{ $multiple ? 'multiple files' : 'one file'}} {{ ($maxFiles !== null) ? '(max '.$maxFiles.')' : '' }}
 
         <input
                 type="file"
-                name="{{$name}}"
+                name="{{ $multiple ? $name.'[]' : $name}}"
                 id="{{ $id }}"
                 value="{{old($id, $value)}}"
                 class="filepond {{ ($errors->first($name) ? 'is-invalid' : '') }}"
-                data-allow-reorder="true">
+                {{ $multiple ? 'multiple' : '' }}
+                {!! $multiple ? 'data-allow-reorder="true"' : '' !!}
+        >
         @include('BlueAdminComponents::formelements._errorandcomment')
     </div>
 </div>
@@ -35,17 +27,19 @@
         const inputElement = document.querySelector('.filepond');
         const pond = FilePond.create( inputElement );
         FilePond.setOptions({
+            @if($maxFiles !== null) maxFiles: {{$maxFiles}},@endif
             server: {
                 url: '{{route('filepond.upload')}}',
                 headers: {
                     'X-CSRF-TOKEN': '{{csrf_token()}}',
                 },
             },
-        {{--
+            @if( isset($model) && ($model->getMedia($name) !== null) )
             files: [
+                @foreach($model->getMedia($name) as $existingFile)
                 {
                     // the server file reference
-                    source: '12345',
+                    source: 'existing_file_{{$existingFile->id}}',
 
                     // set type to local to indicate an already uploaded file
                     options: {
@@ -53,15 +47,15 @@
 
                         // mock file information
                         file: {
-                            name: 'my-file.png',
-                            size: 3001025,
-                            type: 'image/png'
+                            name: '{{$existingFile->name}}',
+                            size: {{$existingFile->size}},
+                            type: '{{$existingFile->mime_type}}'
                         }
                     }
-                }
-            ]
-            --}}
-
+                },
+                @endforeach
+            ],
+            @endif
         });
 
     </script>

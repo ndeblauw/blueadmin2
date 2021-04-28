@@ -21,8 +21,6 @@ class FilepondController extends Controller
 
     public function upload(Request $request)
     {
-        ray($request);
-
         $input = array_reverse($request->allFiles());
         $file = array_pop($input);
 

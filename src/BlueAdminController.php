@@ -253,6 +253,11 @@ class BlueAdminController extends Controller
                 \Spatie\MediaLibrary\MediaCollections\Models\Media::setNewOrder($newOrder);
 
                 unset($valid[$key]);
+            } else {
+                // Key not/no longer present => delete all files
+                foreach($model->getMedia($key) as $media){
+                    $media->delete();
+                }
             }
         }
 

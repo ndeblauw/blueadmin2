@@ -156,7 +156,7 @@ $(function() {
                 @endif
 
                 @if( Session::get('blueadmin-'.$modelname . '-index-show-delete') )
-                  actionfield = actionfield + '<span class="float-left" style="margin-left: 5px; margin-top: -1px;"><form method="POST" action="{{ route('blueadmin.index', ['modelname' => $modelname]) }}/' + row['id'] + '"> @method('DELETE') @csrf <button type="submit" class="btn btn-xs btn-outline-warning"><i class="far fa-trash-alt"></i>&nbsp;Delete</button></form></span>&nbsp;'
+                  actionfield = actionfield + '<span class="float-left" style="margin-left: 5px; margin-top: -1px;"><form method="POST" action="{{ route('blueadmin.index', ['modelname' => $modelname]) }}/' + row['id'] + '"> @method('DELETE') @csrf <button type="submit" {!! config('blueadmin.confirm_delete') ? 'onclick="ConfirmDelete()"' : '' !!} class="btn btn-xs btn-outline-warning"><i class="far fa-trash-alt"></i>&nbsp;Delete</button></form></span>&nbsp;'
                 @endif
 
                 return actionfield
@@ -169,5 +169,15 @@ $(function() {
         ]
     });
 });
+
+function ConfirmDelete()
+{
+    var x = confirm("Are you sure you want to delete?");
+    if (x)
+        return true;
+    else
+        return false;
+}
+
 </script>
 @endpush

@@ -24,4 +24,6 @@ return [
 
     'filepond_temporary_files_disk' => 'local',
     'filepond_temporary_files_path' => 'filepond',
+
+    'confirm_delete' => false,
 ];

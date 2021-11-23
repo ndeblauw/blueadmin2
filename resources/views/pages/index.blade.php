@@ -127,6 +127,18 @@ $(function() {
             @endforeach
         ],
         columnDefs: [
+            @foreach($columns->where('type', 'sleeping') as $column_nr => $column)
+            { targets: {{$column_nr}},
+                render: function(data, type, row) {
+                    if ( row['{{$column->value}}'] ) {
+                        return '<i class="fad fa-snooze text-danger"></i>'
+                    } else {
+                        return ''
+                    }
+                }
+            },
+            @endforeach
+        
             @foreach($columns->where('type', 'boolean') as $column_nr => $column)
             { targets: {{$column_nr}},
               render: function(data, type, row) {

@@ -47,6 +47,10 @@ class BlueAdminController extends Controller
 
         $preloadRelations = array_merge($mapperBelongsTo->pluck('value')->toArray(), $mapperBelongsToMany->pluck('value')->toArray());
         $model = $this->config->model::with($preloadRelations)->select($modelname.'.*');
+        
+        foreach($this->config->index_scopes as $scope) {
+            $model = $model->{$scope}();
+        }
 
         $datatablesObject = DataTables::eloquent($model);
 

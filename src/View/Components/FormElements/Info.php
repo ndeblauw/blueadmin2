@@ -10,8 +10,8 @@ class Info extends Component
     public bool $icon;
 
     public function __construct(
-        string $name = '',
         string $label,
+        string $name = '',
         string $comment = null,
         string $id = null,
         string $size = null,

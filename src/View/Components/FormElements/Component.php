@@ -48,7 +48,7 @@ abstract class Component extends BaseComponent
             $this->value = $value;
         } else {
             $this->model = $this->getBoundTarget();
-            $this->value = $value ?: $this->getBoundValue($bind, $name);
+            $this->value = $value ?: $this->getBoundValue($name, $bind);
         }
     }
 

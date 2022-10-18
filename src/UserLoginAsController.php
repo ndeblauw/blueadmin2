@@ -16,6 +16,9 @@ class UserLoginAsController extends Controller
         } else {
             $user = \App\Models\User::findOrFail($user);
         }
+        if( method_exists($user,'isManager') && $user->isManager()) {
+            abort(403, "Het is niet mogelijk om in te loggen alsof je een andere admin bent");
+        }
         Auth::login($user);
 
         Session::put('loginas', $current_user_id);

@@ -46,6 +46,10 @@
 
 </x-blueadmin-card>
 
+@if(View::exists('admin.'.$modelname.'._index-bottom'))
+    @include('admin.'.$modelname.'._index-bottom')
+@endif
+
 @endsection
 
 

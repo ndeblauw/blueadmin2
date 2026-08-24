@@ -7,7 +7,6 @@
                 type="file"
                 name="{{ $multiple ? $name.'[]' : $name}}"
                 id="{{ $id }}"
-                value="{{old($id, $value)}}"
                 class="filepond {{ ($errors->first($name) ? 'is-invalid' : '') }}"
                 {{ $multiple ? 'multiple' : '' }}
                 {!! $multiple ? 'data-allow-reorder="true"' : '' !!}

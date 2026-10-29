@@ -58,7 +58,7 @@ class BlueAdminController extends Controller
             $datatablesObject->addColumn($map->value, function ($item) use ($map) {
                 $key = $map->value;
                 $field = $map->field;
-                return $item->$key->$field;
+                return $item->$key?->$field;
             });
         }
 
@@ -66,7 +66,7 @@ class BlueAdminController extends Controller
             $datatablesObject->addColumn($map->value, function ($item) use ($map) {
                 $key = $map->value;
                 $field = $map->field;
-                return $item->$key->pluck($field)->implode(', ');
+                return $item->$key?->pluck($field)->implode(', ');
             });
         }
 

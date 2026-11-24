@@ -23,7 +23,7 @@
                 selector: '.tinymce',
                 menubar: false,
                 plugins: [
-                    'advlist autolink lists link image charmap print preview anchor textcolor',
+                    'autolink lists link image charmap print preview anchor textcolor',
                     'searchreplace visualblocks fullscreen',
                     'contextmenu paste help wordcount code'
                 ],
